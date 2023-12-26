@@ -14,11 +14,7 @@ export const getMyProfile = async (supabase: SupabaseClient) => {
     error: userError,
   } = await supabase.auth.getUser()
 
-  console.log('user', userError)
-
   if(!user) return undefined
-
-  console.log('qqqq', user)
     
   const { data, error } = await supabase
     .from('profiles')

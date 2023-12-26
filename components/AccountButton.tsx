@@ -2,8 +2,7 @@
 
 import { createClient } from '@/utils/supabase/client'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation'
 import Profile from '@/utils/supabase/api/profile'
 import { useState } from 'react'
 
@@ -11,14 +10,16 @@ export default function AccountButton({profile}: {profile: Profile | undefined})
 
   const supabase = createClient()
   const [ open, setOpen ] = useState<boolean>(false)
+  const router = useRouter()
   const pathname = usePathname()
 
-
   const signOut = async () => {
-    await supabase.auth.signOut();
-    const router = useRouter();
-    router.push('/');
-  };
+    console.log('signing out')
+    await supabase.auth.signOut()
+    console.log('signed out')
+    if(pathname === '/') router.refresh()
+    else router.replace('/')
+  }
 
   const handleClick = () => {
     setOpen(!open)
@@ -29,7 +30,7 @@ export default function AccountButton({profile}: {profile: Profile | undefined})
   }
 
   return profile ? (
-    <div onBlur={event => !event.currentTarget.contains(event.relatedTarget) && handleBlur()} className="flex flex-col items-center gap-4">
+    <div onBlur={e => {}/* event => !event.currentTarget.contains(event.relatedTarget) && handleBlur() */} className="flex flex-col items-end gap-4">
       <button onClick={handleClick} className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
         {profile.full_name || profile.username || 'Account'}
       </button>
