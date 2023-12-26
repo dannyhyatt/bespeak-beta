@@ -17,6 +17,7 @@ export default function Login({
     console.log('hello');
 
     const origin = headers().get('origin')
+    
     const email = formData.get('email') as string
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
