@@ -8,6 +8,8 @@ export default function LoginWithGoogleButton() {
 
   const signInWithGoogle = async () => {
     const supabase = createClient()
+
+    const origin = window.location.origin
     
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',

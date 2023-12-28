@@ -21,6 +21,7 @@ export default function Login({
     const email = formData.get('email') as string
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
+    const origin = headers().get('origin')
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
