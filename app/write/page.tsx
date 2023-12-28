@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation'
 import Profile, { getMyProfile } from '@/utils/supabase/api/profile'
 import EditableProfileField from '@/components/EditableProfileField'
 import StandardResponsivePage from '@/components/StandardResponsivePage'
+import { LexicalEditor } from 'lexical'
+import Editor from '@/components/LexicalEditor'
 
 export default async function Index() {
   const cookieStore = cookies()
@@ -19,12 +21,7 @@ export default async function Index() {
 
   return (
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile}>
-      <EditableProfileField className="font-bold text-4xl mb-1"
-        profile={profile} displayFieldName="Name" dbField="full_name" initialValue={profile?.full_name} />
-      <EditableProfileField className="before:content-['@'] text-xl text-gray-700 mb-4"
-        profile={profile} displayFieldName="Username" dbField="username" initialValue={profile?.username} />
-      <EditableProfileField className="text-gray-700 text-xl"
-        profile={profile} displayFieldName="Website" dbField="website" initialValue={profile?.website} />
+      <Editor />
     </StandardResponsivePage>
   )
 }
