@@ -1,6 +1,7 @@
 import Profile from "@/utils/supabase/api/profile";
 import DefaultFooter from "./DefaultFooter";
 import DefaultTopBar from "./DefaultTopBar";
+import "../src/styles/lexical.css";
 
 interface StandardResponsivePageProps {
   children: React.ReactNode;
@@ -14,7 +15,7 @@ const StandardResponsivePage = (props: StandardResponsivePageProps) => {
       <DefaultTopBar isSupabaseConnected={props.isSupabaseConnected} profile={props.profile} />
 
       <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3 w-full">
-        <main className="flex-1 flex flex-col m-auto">
+        <main className="flex-1 flex flex-col m-auto sm:w-4/6 w-full">
           {props.children}
         </main>
       </div>

@@ -1,13 +1,106 @@
-export default interface Post {
-  id: string
-  title: string
-  author: string
-  tags: string[]
-}
+import { SupabaseClient } from "@supabase/supabase-js"
 
-export default interface Revision {
+export interface Revision {
   id: string
   post_id: string
   title: string
   content: string
+  cover_image: string
+  created_at: string
+}
+
+export interface Post {
+  id: string
+  author_id: string
+  revision_id: string
+  revision?: Revision
+  tags: string[]
+  created_at: string
+}
+
+export interface PostWithRevision {
+  id: string
+  author_id: string
+  revision_id: string
+  tags?: string[]
+  created_at: string
+  title: string
+  content: string
+  cover_image?: string
+  edited_at: string
+  author_name: string
+  avatar_url: string
+  username: string
+}
+
+// returns post id of created post
+export const createPost = async (supabase: SupabaseClient) => {
+  const { data, error } = await supabase
+    .from('posts')
+    .insert({})
+    .select()
+
+  console.log(data, error)
+
+  if (error) throw error
+  return data[0].id as string
+}
+
+export const createRevision =  async (supabase: SupabaseClient, postId: string, title: String, content: String) => {
+  const { data, error } = await supabase
+    .from('post_revisions')
+    .insert({ post_id: postId, title: title, content: content })
+    .select('*')
+
+  console.log(data, error)
+
+  if (error) throw error
+  return data[0] as Revision
+}
+
+export const updatePostRevision = async (supabase: SupabaseClient, postId: string, revisionId: string) => {
+  console.log('updating post revision', postId, revisionId)
+  const { data, error } = await supabase
+    .from('posts')
+    .update({ revision_id: revisionId })
+    .eq('id', postId)
+
+  console.log('yup', data, error)
+
+  
+  if (error) throw error
+  // return data[0] as Post
+}
+
+export const getPostDataForPageById = async (supabase: SupabaseClient, id: string) => {
+  const { data, error } = await supabase
+    .from('posts_with_revision')
+    .select('*')
+    .eq('id', id)
+    .limit(1)
+
+  console.log("received:::", data, error)
+
+  if(!data || data.length === 0) throw new Error('No data found')
+
+  const post = data[0] as PostWithRevision
+
+  if (error) throw error
+
+  console.log('returning post data', post)
+
+  return post
+}
+
+export const getPostsByAuthorId = async (supabase: SupabaseClient, authorId: string, offset?: number) => {
+  const { data, error } = await supabase
+    .from('posts_with_revision')
+    .select('*')
+    .eq('author_id', authorId)
+    .limit(10)
+    // .offset(offset || 0)
+
+  if (error) throw error
+  
+  return data as PostWithRevision[]
 }

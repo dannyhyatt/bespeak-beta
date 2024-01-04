@@ -1,6 +1,6 @@
 'use client'
 
-import Post from '@/utils/supabase/api/post'
+import {Post} from '@/utils/supabase/api/post'
 import Profile from '@/utils/supabase/api/profile'
 import { createClient } from '@/utils/supabase/client'
 import { useState } from 'react'

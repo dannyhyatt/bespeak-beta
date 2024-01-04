@@ -24,9 +24,11 @@ import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentLevelPlugin";
 import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
 import AutoLinkPlugin from "./plugins/AutoLinkPlugin";
 
-import "../src/styles/lexical.css";
+// import "../src/styles/lexical.css";
 import { EditorState, RootNode } from "lexical";
 import { useRef } from "react";
+import HtmlPlugin from "./plugins/HtmlPlugin";
+import { LoadInitialContent } from "./plugins/LoadInitialContent";
 
 function Placeholder() {
   return <div className="editor-placeholder">Jot here...</div>;
@@ -57,13 +59,21 @@ const editorConfig = {
   namespace: "example",
 };
 
-export default function Editor({editorStateRef} : {editorStateRef: React.MutableRefObject<EditorState | undefined>}) {
+export default function Editor({
+    editorStateRef, onHtmlChanged, initalHtml
+  } : {
+    editorStateRef: React.MutableRefObject<EditorState | undefined>,
+    onHtmlChanged: (html: string) => void,
+    initalHtml?: string
+  }
+) {
 
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <div className="editor-container">
+      <div className="editor-container pb-4">
         <ToolbarPlugin />
         <div className="editor-inner">
+          <LoadInitialContent initialContent={initalHtml} />
           <RichTextPlugin
             contentEditable={<ContentEditable className="editor-input" />}
             placeholder={<Placeholder />}
@@ -78,6 +88,7 @@ export default function Editor({editorStateRef} : {editorStateRef: React.Mutable
           <AutoLinkPlugin />
           <ListMaxIndentLevelPlugin maxDepth={7} />
           <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+          <HtmlPlugin onHtmlChanged={onHtmlChanged} />
         </div>
       </div>
     </LexicalComposer>
