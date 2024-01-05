@@ -2,10 +2,21 @@ import { SupabaseClient } from "@supabase/supabase-js";
 
 export default interface Profile {
   id: string;
-  full_name?: string;
-  username?: string;
+  full_name: string;
+  username: string;
+  bio?: string;
   website?: string;
   avatar_url?: string;
+}
+
+export const setProfile = async (supabase: SupabaseClient, profile: Profile) => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .upsert(profile)
+    .select('*')
+
+  if (error) throw error
+  return data[0] as Profile
 }
 
 export const getMyProfile = async (supabase: SupabaseClient) => {

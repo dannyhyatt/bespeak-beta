@@ -5,8 +5,9 @@ import { redirect } from 'next/navigation'
 import { MouseEventHandler } from 'react'
 import ActionButton from '@/components/ActionButton'
 import LoginWithGoogleButton from '@/components/LoginWithGoogleButton'
+import Profile, { getMyProfile } from '@/utils/supabase/api/profile'
 
-export default function Login({
+export default async function Login({
   searchParams,
 }: {
   searchParams: { message: string }
@@ -36,6 +37,16 @@ export default function Login({
 
     return redirect('/login?message=Check your email to continue sign in process')
   }
+
+
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
+  const user = await supabase.auth.getUser()
+  const profile: Profile | undefined = await getMyProfile(supabase)
+
+  if(profile) return redirect('/profile')
+  if(user.data.user) return redirect('/create-profile')
 
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">

@@ -7,6 +7,7 @@ interface StandardResponsivePageProps {
   children: React.ReactNode;
   isSupabaseConnected: boolean;
   profile?: Profile;
+  className?: string;
 }
 
 const StandardResponsivePage = (props: StandardResponsivePageProps) => {
@@ -15,7 +16,7 @@ const StandardResponsivePage = (props: StandardResponsivePageProps) => {
       <DefaultTopBar isSupabaseConnected={props.isSupabaseConnected} profile={props.profile} />
 
       <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3 w-full">
-        <main className="flex-1 flex flex-col m-auto sm:w-4/6 w-full">
+        <main className={`flex-1 flex flex-col m-auto w-full sm:w-6/12 lg:w-6/12 ${props.className}`}>
           {props.children}
         </main>
       </div>

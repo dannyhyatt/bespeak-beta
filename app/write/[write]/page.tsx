@@ -21,7 +21,7 @@ export default async function Index({
   const post = await getPostDataForPageById(supabase, params.write)
 
   return (
-    <StandardResponsivePage isSupabaseConnected={profile != null} profile={profile}>
+    <StandardResponsivePage isSupabaseConnected={profile != null} profile={profile} className='resize-x overflow-auto max-w-[min(100%,56rem)]'>
       <Suspense fallback={<div>Loading...</div>}>
         <ArticleEditor post={post} />
       </Suspense>
