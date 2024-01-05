@@ -20,7 +20,7 @@ export default async function Index({
 
   return (
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile}>
-      <h1 className={`bg-transparent cursor-text outline-none overflow-visible text-2xl mb-1 font-semibold resize-none`}>
+      <h1 className={`bg-transparent cursor-text outline-none overflow-visible text-2xl mb-1 font-semibold resize-none dark:text-white`}>
         {post?.title}
       </h1>
       <Link className="text-lg mb-3" href={`/profile/${post.author_id}`}>

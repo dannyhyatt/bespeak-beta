@@ -42,7 +42,7 @@ ol {
 
 h1 {
   font-size: 24px;
-  color: #333;
+  /* color: #333; */
 }
 
 .ltr {
@@ -761,6 +761,10 @@ i.justify-align {
 @media screen and (prefers-color-scheme: dark) {
   .toolbar {
     background: #222;
+    color: white;
+  }
+
+  .editor-heading-h2 {
     color: white;
   }
 
