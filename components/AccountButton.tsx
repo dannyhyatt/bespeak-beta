@@ -37,7 +37,7 @@ export default function AccountButton({profile}: {profile: Profile | undefined})
       {open && (
         <div className="flex flex-col absolute mt-11 bg-btn-background rounded-md text-right">
           {pathname !== '/write' && <Link href='/write' className="block py-2 px-4 hover:bg-btn-background-hover hover:rounded-md">Write</Link>}
-          {pathname !== '/profile' && <Link href='/profile' className="block py-2 px-4 hover:bg-btn-background-hover hover:rounded-md">Your Profile</Link>}
+          {pathname !== '/profile' && <Link href='/profile' className="block py-2 px-4 hover:bg-btn-background-hover hover:rounded-md">Profile</Link>}
           <button onClick={signOut} className="block py-2 px-4 hover:bg-btn-background-hover hover:rounded-md text-right">Sign out</button>
         </div>
       )}
