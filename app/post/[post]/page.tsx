@@ -19,7 +19,7 @@ export default async function Index({
   const post = await getPostDataForPageById(supabase, params.post)
 
   return (
-    <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile}>
+    <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile} className='lg:w-7/12'>
       <h1 className={`bg-transparent cursor-text outline-none overflow-visible text-2xl mb-1 font-semibold resize-none dark:text-white`}>
         {post?.title}
       </h1>

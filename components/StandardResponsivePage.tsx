@@ -16,7 +16,7 @@ const StandardResponsivePage = (props: StandardResponsivePageProps) => {
       <DefaultTopBar isSupabaseConnected={props.isSupabaseConnected} profile={props.profile} />
 
       <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3 w-full">
-        <main className={`flex-1 flex flex-col m-auto w-full sm:w-8/12 lg:w-6/12 ${props.className}`}>
+        <main className={`${props.className} flex-1 flex flex-col m-auto w-full sm:w-8/12 lg:w-6/12`}>
           {props.children}
         </main>
       </div>
