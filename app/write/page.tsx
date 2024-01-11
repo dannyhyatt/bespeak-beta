@@ -6,6 +6,7 @@ import PostTitleField from '@/components/PostTitleField'
 import { Suspense, useEffect, useState } from 'react'
 import ArticleEditor from '@/components/ArticleEditor'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 export default async function Index() {
   const cookieStore = cookies()  
@@ -13,6 +14,8 @@ export default async function Index() {
 
   const profile: Profile | undefined = await getMyProfile(supabase)
   const isSupabaseConnected = profile != null
+
+  if(!profile) return redirect('/login')
 
   console.log('profile', profile)
 

@@ -33,11 +33,20 @@ export interface PostWithRevision {
   username: string
 }
 
+export interface RevisionCardInfo {
+  id: string
+  title: string
+  created_at: string
+}
+
 // returns post id of created post
 export const createPost = async (supabase: SupabaseClient) => {
   const { data, error } = await supabase
     .from('posts')
-    .insert({})
+    .insert({
+      author_id: (await supabase.auth.getUser()).data.user?.id,
+      tags: ['test'],
+    })
     .select()
 
   console.log(data, error)
@@ -103,4 +112,28 @@ export const getPostsByAuthorId = async (supabase: SupabaseClient, authorId: str
   if (error) throw error
   
   return data as PostWithRevision[]
+}
+
+export const getRevision = async (supabase: SupabaseClient, revisionId: string) => {
+  const { data, error } = await supabase
+    .from('post_revisions')
+    .select('*')
+    .eq('id', revisionId)
+    .limit(1)
+
+  if (error) throw error
+
+  return data[0] as Revision
+}
+
+export const getRevisionsByPostId = async (supabase: SupabaseClient, postId: string) => {
+  const { data, error } = await supabase
+    .from('post_revisions')
+    .select('title, created_at, id')
+    .eq('post_id', postId)
+    .order('created_at', { ascending: false })
+
+  if (error) throw error
+
+  return data as RevisionCardInfo[]
 }

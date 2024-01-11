@@ -1,12 +1,10 @@
 import { createClient } from '@/utils/supabase/server'
 import Profile, { getMyProfile } from '@/utils/supabase/api/profile'
 import StandardResponsivePage from '@/components/StandardResponsivePage'
-import Editor from '@/components/LexicalEditor'
-import PostTitleField from '@/components/PostTitleField'
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense } from 'react'
 import ArticleEditor from '@/components/ArticleEditor'
 import { cookies } from 'next/headers'
-import { useRouter } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import { getPostDataForPageById } from '@/utils/supabase/api/post'
 
 export default async function Index({
@@ -17,6 +15,8 @@ export default async function Index({
 
   const profile: Profile | undefined = await getMyProfile(supabase)
   const isSupabaseConnected = profile != null
+
+  if(!profile) return redirect('/login')
 
   const post = await getPostDataForPageById(supabase, params.write)
 

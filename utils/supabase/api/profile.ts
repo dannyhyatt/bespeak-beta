@@ -7,6 +7,7 @@ export default interface Profile {
   bio?: string;
   website?: string;
   avatar_url?: string;
+  updated_at: string;
 }
 
 export const setProfile = async (supabase: SupabaseClient, profile: Profile) => {

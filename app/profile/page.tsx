@@ -15,6 +15,8 @@ export default async function Index() {
   const profile: Profile | undefined = await getMyProfile(supabase)
   const isSupabaseConnected = profile != null
 
+  console.log('received profile: ', profile)
+
   if(!profile) return redirect('/login')
   
   const posts = await getPostsByAuthorId(supabase, profile.id)

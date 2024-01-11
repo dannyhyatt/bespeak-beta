@@ -92,6 +92,7 @@ h1 {
   user-select: none;
   display: inline-block;
   pointer-events: none;
+  margin-top: 12px;
 }
 
 .editor-text-bold {
@@ -226,7 +227,7 @@ h1 {
 }
 
 .editor-heading-h1 {
-  font-size: 24px;
+  font-size: 1.75rem;
   color: rgb(5, 5, 5);
   font-weight: 400;
   margin: 0;
@@ -235,7 +236,7 @@ h1 {
 }
 
 .editor-heading-h2 {
-  font-size: 18px;
+  font-size: 1.25rem;
   color: rgb(27, 28, 29);
   font-weight: 700;
   margin: 0;

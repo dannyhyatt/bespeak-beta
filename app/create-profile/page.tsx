@@ -22,7 +22,6 @@ export default async function Index() {
   const user = await supabase.auth.getUser()
   if(!user.data.user) return redirect('/login')
 
-
   return (
       
     <main className="flex-1 flex flex-col m-auto w-full sm:w-6/12 lg:w-4/12 animate-in px-4">

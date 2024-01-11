@@ -30,13 +30,11 @@ export default function ArticleEditor({ post }: { post?: PostWithRevision }) {
 
   const editorStateRef = useRef<EditorState>()
 
-
   const changeTitle = (newTitle: string) => {
     currentTitle = newTitle
     setCanPublish(currentTitle.length > 0)
     setCanSave(currentTitle.length > 0)
   }
-
 
   const keyDownHandler: KeyboardEventHandler<HTMLDivElement> = (e) => {
     if(window.scrollY + window.innerHeight + 100 > document.documentElement.scrollHeight) {
@@ -49,16 +47,33 @@ export default function ArticleEditor({ post }: { post?: PostWithRevision }) {
     if(!currentTitle || !currentHtml) return
     console.log('saving post')
     let postId = post?.id
+
     if(!postId) {
       // todo turn this process into an RPC
       postId = await createPost(client)
     }
 
-    const revision = await createRevision(client, postId, currentTitle, currentHtml)
+    const body = { title: currentTitle, content: currentHtml, postId: postId }
+    console.log('sending body', body)
+    const {data, error} = await client.functions.invoke('upload_revision', {
+      body: body,
+    })
+    if(error) {
+      // todo show an error message
+      console.log('error', error)
+      return
+    }
 
-    if(revision) {
+    const revisionId = data[0]?.id
+
+    if(revisionId) {
+      await updatePostRevision(client, postId, revisionId)
+    }
+
+    // const revision = await createRevision(client, postId, currentTitle, currentHtml)
+
+    if(revisionId) {
       console.log('revision created')
-      await updatePostRevision(client, postId, revision.id)
       console.log('hello???')
       router.push(`/write/${postId}`)
 
@@ -88,6 +103,8 @@ export default function ArticleEditor({ post }: { post?: PostWithRevision }) {
       </div>
       <span id="save-or-publish-toolbar">
         <SaveOrPublishToolbar
+          canViewRevisions={post != null}
+          post={post}
           canPublish={true}
           canSave={true}
           onPublish={async () => {

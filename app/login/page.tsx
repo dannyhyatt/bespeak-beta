@@ -2,10 +2,11 @@ import Link from 'next/link'
 import { headers, cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import { MouseEventHandler } from 'react'
+import { MouseEventHandler, useState } from 'react'
 import ActionButton from '@/components/ActionButton'
 import LoginWithGoogleButton from '@/components/LoginWithGoogleButton'
 import Profile, { getMyProfile } from '@/utils/supabase/api/profile'
+import EmailCodeModalWithToggle from '@/components/EmailCodeModalWithToggle'
 
 export default async function Login({
   searchParams,
@@ -101,6 +102,8 @@ export default async function Login({
         <hr className="my-4" />
 
         <LoginWithGoogleButton />
+
+        <EmailCodeModalWithToggle />
 
       </div>
     </div>
