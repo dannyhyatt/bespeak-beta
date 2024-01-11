@@ -10,7 +10,7 @@ export default interface Profile {
   updated_at: string;
 }
 
-export default interface CreateProfileParams {
+interface CreateProfileParams {
   id: string;
   full_name: string;
   username: string;
