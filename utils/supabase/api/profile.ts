@@ -10,7 +10,16 @@ export default interface Profile {
   updated_at: string;
 }
 
-export const setProfile = async (supabase: SupabaseClient, profile: Profile) => {
+export default interface CreateProfileParams {
+  id: string;
+  full_name: string;
+  username: string;
+  bio?: string;
+  website?: string;
+  avatar_url?: string;
+}
+
+export const setProfile = async (supabase: SupabaseClient, profile: CreateProfileParams) => {
   const { data, error } = await supabase
     .from('profiles')
     .upsert(profile)
