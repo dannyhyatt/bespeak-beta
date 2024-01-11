@@ -25,7 +25,8 @@ export default async function Index({
     id: params.profile,
     full_name: posts[0].author_name,
     username: posts[0].username,
-    avatar_url: 'https://www.gravatar.com'
+    avatar_url: 'https://www.gravatar.com',
+    updated_at: new Date().toISOString(),
   }
 
   console.log('received posts', posts)
