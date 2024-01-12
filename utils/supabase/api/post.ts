@@ -115,6 +115,21 @@ export const getPostsByAuthorId = async (supabase: SupabaseClient, authorId: str
   return data as PostWithRevision[]
 }
 
+export const getPostsByAuthorUsername = async (supabase: SupabaseClient, authorUsername: string, offset?: number, orderBy?: string) => {
+  const { data, error } = await supabase
+    .from('posts_with_revision')
+    .select('*')
+    .eq('username', authorUsername)
+    .order(orderBy || 'created_at', { ascending: false })
+    .limit(10)
+    // .offset(offset || 0)
+
+  if (error) throw error
+  
+  return data as PostWithRevision[]
+}
+
+
 export const getRevision = async (supabase: SupabaseClient, revisionId: string) => {
   const { data, error } = await supabase
     .from('post_revisions')

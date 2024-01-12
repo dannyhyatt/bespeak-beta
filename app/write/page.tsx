@@ -8,6 +8,8 @@ import ArticleEditor from '@/components/ArticleEditor'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
+
+
 export default async function Index() {
   const cookieStore = cookies()  
   const supabase = createClient(cookieStore)
@@ -20,7 +22,7 @@ export default async function Index() {
   console.log('profile', profile)
 
   return (
-    <StandardResponsivePage isSupabaseConnected={profile != null} profile={profile} className='resize-x overflow-auto max-w-[min(100%,56rem)]'>
+    <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile} className='resize-x overflow-auto max-w-[min(100%,56rem)] lg:w-7/12'>
       <Suspense fallback={<div>Loading...</div>}>
         <ArticleEditor />
       </Suspense>

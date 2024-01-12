@@ -41,3 +41,10 @@
     transform: translateY(0);
   }
 }
+
+.input-with-search {
+  background-image: url(/images/icons/search.svg);
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 1.5rem;
+}

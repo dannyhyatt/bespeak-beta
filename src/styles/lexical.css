@@ -765,12 +765,20 @@ i.justify-align {
     background: #222;
     color: white;
   }
-
-  .editor-heading-h2 {
+  
+  .editor-container {
     color: white;
   }
 
-  .toolbar button.toolbar-item i.format {
-    
+  .editor-paragraph {
+    color: white;
+  }
+
+  .editor-code {
+    background-color: #222;
+  }
+
+  .toolbar button.toolbar-item {
+    filter: invert(1);
   }
 }

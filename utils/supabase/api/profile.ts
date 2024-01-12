@@ -43,6 +43,20 @@ export const getProfileById = async (supabase: SupabaseClient, id: string) => {
   return profile
 }
 
+export const getProfileByUsername = async (supabase: SupabaseClient, username: string) => {
+    
+  const { data, error } = await supabase
+    .from('profiles')
+    .select()
+    .eq('username', username)
+    .single()
+    
+
+  const profile = data as Profile
+
+  return profile
+}
+
 export const getMyProfile = async (supabase: SupabaseClient) => {
   const {
     data: { user },
