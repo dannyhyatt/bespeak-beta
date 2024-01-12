@@ -6,8 +6,6 @@ import { PostCard } from "./PostCard";
 
 export default function PostList({ initialPosts }: { initialPosts?: PostWithRevision[]}) {
 
-  console.log('initial posts', initialPosts)
-
   return (
     <div className="flex flex-col">
       {initialPosts?.map(post => {

@@ -17,8 +17,6 @@ export default async function Index({
 
   const profile: Profile | undefined = await getMyProfile(supabase)
   const isSupabaseConnected = profile != null
-
-  if(!profile) return redirect('/login')
   
   const posts = await getPostsByAuthorId(supabase, params.profile)
 
@@ -31,15 +29,15 @@ export default async function Index({
       
       <h1 className="text-xl font-bold mb-2">Profile</h1>
       <EditableProfileField className="font-bold text-4xl mb-1"
-        profile={profile} displayFieldName="Name" dbField="full_name" initialValue={viewingProfile?.full_name} disabled />
+        profile={viewingProfile} displayFieldName="Name" dbField="full_name" initialValue={viewingProfile?.full_name} disabled />
       <EditableProfileField className="before:content-['@'] text-xl text-gray-700 dark:text-gray-300 mb-4"
-        profile={profile} displayFieldName="Username" dbField="username" initialValue={viewingProfile?.username} disabled />
+        profile={viewingProfile} displayFieldName="Username" dbField="username" initialValue={viewingProfile?.username} disabled />
       <p className="text-gray-700 dark:text-gray-300 text-xl mb-4 overflow-x-auto">{viewingProfile.bio}</p>
       <Link className="text-gray-700 dark:text-gray-300 text-lg underline font-bold" href={viewingProfile.website || ''}>
         {viewingProfile.website}
       </Link>
       
-      <h1 className="text-xl font-bold mb-2 mt-8 ">Posts</h1>
+      <h1 className="text-xl font-bold mt-8 mb-4">Posts</h1>
       {posts.length != 0 ? <PostList initialPosts={posts}  /> : <div className="text-2xl text-center">No posts yet</div>}
     </StandardResponsivePage>
   )
