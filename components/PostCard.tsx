@@ -9,7 +9,7 @@ export function PostCard({ post } : { post: PostWithRevision }) {
   if(!post) return
 
   return (
-    <Link href={`/post/${post.id}`} className="flex flex-col mb-4 rounded-md shadow-lg p-4">
+    <Link href={`/post/${post.id}`} className="flex flex-col mb-4 rounded-md shadow-lg dark:shadow-gray-300 p-4">
       {post.cover_image && <img src={post.cover_image} className="mb-2" />}
       <div className="text-2xl font-bold">{post?.title}</div>
       <div className="line-clamp-3 my-2">{convert(post.content)}</div>

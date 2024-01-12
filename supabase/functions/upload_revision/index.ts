@@ -12,6 +12,30 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+const sanitizeConfig = {
+  allowedTags: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code', 'pre', 'span'],
+  allowedClasses: {
+    '*' : [],
+    'p' : ['editor-paragraph'],
+    'h1' : ['editor-heading-h1'],
+    'h2' : ['editor-heading-h2'],
+    'ul' : ['editor-list-ul'],
+    'ol' : ['editor-list-ol'],
+    'li' : ['editor-listitem'],
+    'blockquote' : ['editor-quote'],
+    'pre' : []
+  },
+  allowedAttributes: {
+    'p' : ['dir'],
+    'h1' : ['dir'],
+    'h2' : ['dir'],
+    'li' : ['value'],
+    'a' : ['href', 'target', 'rel'],
+    'blockquote' : ['dir'],
+    'pre' : ['spellcheck', 'data-highlight-language']
+  },
+};
+
 Deno.serve(async (req) => {
 
   if (req.method === 'OPTIONS') {
@@ -41,7 +65,7 @@ Deno.serve(async (req) => {
 
     console.log('unsanitized content: ', content)
 
-    const safeContent = sanitizeHtml(content)
+    const safeContent = sanitizeHtml(content, sanitizeConfig)
 
     console.log('sanitized content: ', safeContent)
     

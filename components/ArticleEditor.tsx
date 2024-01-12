@@ -10,6 +10,7 @@ import { $getRoot, EditorState, LexicalEditor } from "lexical";
 import { createClient } from "@/utils/supabase/client";
 import { title } from "process";
 import { useRouter } from "next/navigation";
+import sanitize from "sanitize-html";
 
 export default function ArticleEditor({ post }: { post?: PostWithRevision }) {
 
@@ -76,7 +77,6 @@ export default function ArticleEditor({ post }: { post?: PostWithRevision }) {
       console.log('revision created')
       console.log('hello???')
       router.push(`/write/${postId}`)
-
     } else {
       console.log('revision failed')
     }
@@ -88,6 +88,7 @@ export default function ArticleEditor({ post }: { post?: PostWithRevision }) {
       // todo check if there are any unsaved changes
       return 'Are you sure you want to leave?'
     }
+    // window.sanitizeHtml = sanitize
   }, [])
 
   return (

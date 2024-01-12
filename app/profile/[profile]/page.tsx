@@ -1,12 +1,13 @@
 import { createClient } from '@/utils/supabase/server'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import Profile, { getMyProfile } from '@/utils/supabase/api/profile'
+import Profile, { getMyProfile, getProfileById } from '@/utils/supabase/api/profile'
 import EditableProfileField from '@/components/EditableProfileField'
 import StandardResponsivePage from '@/components/StandardResponsivePage'
 import PostList from '@/components/PostList'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Revision, Post, getPostsByAuthorId } from '@/utils/supabase/api/post'
+import Link from 'next/link'
 
 export default async function Index({
   params
@@ -21,13 +22,7 @@ export default async function Index({
   
   const posts = await getPostsByAuthorId(supabase, params.profile)
 
-  const viewingProfile: Profile = {
-    id: params.profile,
-    full_name: posts[0].author_name,
-    username: posts[0].username,
-    avatar_url: 'https://www.gravatar.com',
-    updated_at: new Date().toISOString(),
-  }
+  const viewingProfile = await getProfileById(supabase, params.profile)
 
   console.log('received posts', posts)
 
@@ -36,14 +31,16 @@ export default async function Index({
       
       <h1 className="text-xl font-bold underline mb-2">Profile</h1>
       <EditableProfileField className="font-bold text-4xl mb-1"
-        profile={profile} displayFieldName="Name" dbField="full_name" initialValue={profile?.full_name} disabled />
+        profile={profile} displayFieldName="Name" dbField="full_name" initialValue={viewingProfile?.full_name} disabled />
       <EditableProfileField className="before:content-['@'] text-xl text-gray-700 dark:text-gray-300 mb-4"
-        profile={profile} displayFieldName="Username" dbField="username" initialValue={profile?.username} disabled />
-      <EditableProfileField className="text-gray-700 dark:text-gray-300 text-xl"
-        profile={profile} displayFieldName="Website" dbField="website" initialValue={profile?.website} disabled />
+        profile={profile} displayFieldName="Username" dbField="username" initialValue={viewingProfile?.username} disabled />
+      <p className="text-gray-700 dark:text-gray-300 text-xl mb-4 overflow-x-auto">{viewingProfile.bio}</p>
+      <Link className="text-gray-700 dark:text-gray-300 text-lg underline font-bold" href={viewingProfile.website || ''}>
+        {viewingProfile.website}
+      </Link>
       
       <h1 className="text-xl font-bold underline mb-2 mt-8 ">Posts</h1>
-      {posts.length != 0 ? <PostList initialPosts={posts}  /> : <div className="text-2xl">No posts yet</div>}
+      {posts.length != 0 ? <PostList initialPosts={posts}  /> : <div className="text-2xl text-center">No posts yet</div>}
     </StandardResponsivePage>
   )
 }
