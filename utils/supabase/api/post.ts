@@ -101,11 +101,12 @@ export const getPostDataForPageById = async (supabase: SupabaseClient, id: strin
   return post
 }
 
-export const getPostsByAuthorId = async (supabase: SupabaseClient, authorId: string, offset?: number) => {
+export const getPostsByAuthorId = async (supabase: SupabaseClient, authorId: string, offset?: number, orderBy?: string) => {
   const { data, error } = await supabase
     .from('posts_with_revision')
     .select('*')
     .eq('author_id', authorId)
+    .order(orderBy || 'created_at', { ascending: false })
     .limit(10)
     // .offset(offset || 0)
 

@@ -26,7 +26,7 @@ export default async function Index() {
   return (
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile}>
       
-      <h1 className="text-xl font-bold underline mb-2 ">Profile</h1>
+      <h1 className="text-xl font-bold mb-2 ">Profile</h1>
       <EditableProfileField className="font-bold text-4xl mb-1"
         profile={profile} displayFieldName="Name" dbField="full_name" initialValue={profile?.full_name} />
       <EditableProfileField className="before:content-['@'] text-xl text-gray-700 dark:text-gray-300 mb-4"
@@ -36,7 +36,7 @@ export default async function Index() {
         <EditableProfileField className="text-gray-700 dark:text-gray-300 text-lg underline"
           profile={profile} displayFieldName="Website" dbField="website" initialValue={profile?.website} />
       
-      <h1 className="text-xl font-bold underline mb-2 mt-8 ">Posts</h1>
+      <h1 className="text-xl font-bold mb-2 mt-8 mb-4">Posts</h1>
       {posts.length != 0 ? <PostList initialPosts={posts}  /> : <div className="text-2xl">No posts yet</div>}
     </StandardResponsivePage>
   )
