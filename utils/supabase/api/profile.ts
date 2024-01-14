@@ -76,3 +76,15 @@ export const getMyProfile = async (supabase: SupabaseClient) => {
 
   return profile
 }
+
+export const getProfilesBySearch = async (supabase: SupabaseClient, search: string) => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .ilike('username', `%${search}%`)
+    .limit(10)
+
+  if (error) throw error
+
+  return data as Profile[]
+}

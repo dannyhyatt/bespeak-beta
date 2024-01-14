@@ -4,7 +4,7 @@ import Profile from '@/utils/supabase/api/profile'
 import { createClient } from '@/utils/supabase/client'
 import { useState } from 'react'
 
-export default function EditableProfileField({
+export default function EditableProfileFieldTextArea({
   profile, dbField, displayFieldName, initialValue, className, disabled, placeholder
 }: {
   profile: Profile,
