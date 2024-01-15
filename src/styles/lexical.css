@@ -770,12 +770,21 @@ i.justify-align {
     color: white;
   }
 
-  .editor-paragraph {
+  .editor-paragraph, .editor-heading-h1, .editor-heading-h2 {
     color: white;
   }
 
   .editor-code {
     background-color: #222;
+  }
+
+  .editor-text-code {
+    background-color: #333;
+  }
+
+  .editor-code::before, .editor-code::after {
+    color: #f0f0f0;
+    background-color: #333;
   }
 
   .toolbar button.toolbar-item {

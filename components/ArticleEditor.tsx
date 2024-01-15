@@ -1,18 +1,37 @@
 'use client'
 
-import {Post, PostWithRevision, createPost, createRevision, updatePostRevision } from "@/utils/supabase/api/post";
-import Editor from "./LexicalEditor";
-import PostTitleField from "./PostTitleField";
-import SaveOrPublishToolbar from "./SaveOrPublishToolbar";
-import { KeyboardEventHandler, MutableRefObject, useEffect, useRef, useState } from "react";
-import { $generateHtmlFromNodes } from "@lexical/html";
-import { $getRoot, EditorState, LexicalEditor } from "lexical";
-import { createClient } from "@/utils/supabase/client";
-import { title } from "process";
-import { useRouter } from "next/navigation";
-import sanitize from "sanitize-html";
+import { Color } from '@tiptap/extension-color'
+import ListItem from '@tiptap/extension-list-item'
+import TextStyle from '@tiptap/extension-text-style'
+import { EditorProvider, useCurrentEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import React, { KeyboardEventHandler, useState } from 'react'
 
-export default function ArticleEditor({ post }: { post?: PostWithRevision }) {
+import { PostWithRevision } from '@/utils/supabase/api/post'
+
+import '../src/styles/editor.css'
+import { IconBold, IconClearFormatting, IconCode, IconItalic, IconLetterP, IconStrikethrough } from '@tabler/icons-react'
+import { MenuBar } from './MenuBar'
+import PostTitleField from './PostTitleField'
+import { createClient } from '@/utils/supabase/client'
+import { useRouter } from 'next/navigation'
+
+const extensions = [
+  Color.configure({ types: [TextStyle.name, ListItem.name] }),
+  // TextStyle.configure({ types: [ListItem.name] }),
+  StarterKit.configure({
+    bulletList: {
+      keepMarks: true,
+      keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+    },
+    orderedList: {
+      keepMarks: true,
+      keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+    },
+  }),
+]
+
+export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
 
   const client = createClient()
 
@@ -21,15 +40,11 @@ export default function ArticleEditor({ post }: { post?: PostWithRevision }) {
   const [canPublish, setCanPublish] = useState<boolean>(false)
   const [canSave, setCanSave] = useState<boolean>(false)
 
-  console.log('post', post)
-
   let initialTitle: string | undefined = post?.title
   let currentTitle: string = initialTitle || ''
 
   let initalHtml: string | undefined = post?.content
   let currentHtml: string | undefined = initalHtml
-
-  const editorStateRef = useRef<EditorState>()
 
   const changeTitle = (newTitle: string) => {
     currentTitle = newTitle
@@ -43,78 +58,10 @@ export default function ArticleEditor({ post }: { post?: PostWithRevision }) {
     }
   }
 
-  const saveHandler = async () => {
-    console.log('save handler', currentHtml)
-    if(!currentTitle || !currentHtml) return
-    console.log('saving post')
-    let postId = post?.id
-
-    if(!postId) {
-      // todo turn this process into an RPC
-      postId = await createPost(client)
-    }
-
-    const body = { title: currentTitle, content: currentHtml, postId: postId }
-    console.log('sending body', body)
-    const {data, error} = await client.functions.invoke('upload_revision', {
-      body: body,
-    })
-    if(error) {
-      // todo show an error message
-      console.log('error', error)
-      return
-    }
-
-    const revisionId = data[0]?.id
-
-    if(revisionId) {
-      await updatePostRevision(client, postId, revisionId)
-    }
-
-    // const revision = await createRevision(client, postId, currentTitle, currentHtml)
-
-    if(revisionId) {
-      console.log('revision created')
-      console.log('hello???')
-      router.push(`/write/${postId}`)
-    } else {
-      console.log('revision failed')
-    }
-    
-  }
-
-  useEffect(() => { 
-    window.onbeforeunload = function() {
-      // todo check if there are any unsaved changes
-      return 'Are you sure you want to leave?'
-    }
-    // window.sanitizeHtml = sanitize
-  }, [])
-
   return (
     <>
       <PostTitleField onChange={changeTitle} initialValue={initialTitle} />
-      <div id="editor-wrapper" className="mb-4" onKeyDown={keyDownHandler}>
-        {/* this is inefficient, as the html is parsed for every change
-            in the future this should be fixed by only generating the html
-            when the save or publish button is pressed */}
-        <Editor editorStateRef={editorStateRef} initalHtml={post?.content} onHtmlChanged={(e) => {
-          currentHtml = e
-        }} />
-      </div>
-      <span id="save-or-publish-toolbar">
-        <SaveOrPublishToolbar
-          canViewRevisions={post != null}
-          post={post}
-          canPublish={true}
-          canSave={true}
-          onPublish={async () => {
-            await new Promise((resolve) => setTimeout(resolve, 5000));
-            // Your publish logic here
-          }}
-          onSave={saveHandler}
-        />
-      </span>
+      <EditorProvider injectCSS={true} slotBefore={<MenuBar />} extensions={extensions} content={post?.content}>{' '}</EditorProvider>
     </>
-  );
+  )
 }
