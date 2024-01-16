@@ -2,7 +2,7 @@
 
 import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
-import TextStyle from '@tiptap/extension-text-style'
+import TextStyle, { TextStyleOptions } from '@tiptap/extension-text-style'
 import { EditorProvider, useCurrentEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import React, { KeyboardEventHandler, useState } from 'react'
@@ -15,10 +15,12 @@ import { MenuBar } from './MenuBar'
 import PostTitleField from './PostTitleField'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
+import Placeholder from '@tiptap/extension-placeholder'
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
   // TextStyle.configure({ types: [ListItem.name] }),
+  TextStyle.configure(),
   StarterKit.configure({
     bulletList: {
       keepMarks: true,
@@ -29,6 +31,10 @@ const extensions = [
       keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
     },
   }),
+  Placeholder.configure({
+    emptyEditorClass: 'is-editor-empty',
+    placeholder: 'Write something great...',
+  })
 ]
 
 export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
@@ -58,10 +64,16 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
     }
   }
 
+  const editorProps = {
+    attributes: {
+      class: 'prose dark:prose-invert prose-sm sm:prose-base lg:prose xl:prose m-5 focus:outline-none',
+    },
+  }
+
   return (
     <>
       <PostTitleField onChange={changeTitle} initialValue={initialTitle} />
-      <EditorProvider injectCSS={true} slotBefore={<MenuBar />} extensions={extensions} content={post?.content}>{' '}</EditorProvider>
+      <EditorProvider injectCSS={true} slotBefore={<MenuBar />} extensions={extensions} content={post?.content} editorProps={editorProps}>{' '}</EditorProvider>
     </>
   )
 }
