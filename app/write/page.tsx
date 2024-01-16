@@ -22,7 +22,7 @@ export default async function Index() {
   console.log('profile', profile)
 
   return (
-    <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile} className='resize-x overflow-auto max-w-[min(100%,56rem)] lg:w-7/12'>
+    <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile} className='resize-x max-w-[min(100%,56rem)] lg:w-7/12 items-stretch overflow-visible h-auto'>
       <Suspense fallback={<div>Loading...</div>}>
         <ArticleEditor />
       </Suspense>

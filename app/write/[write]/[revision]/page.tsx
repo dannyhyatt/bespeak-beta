@@ -28,7 +28,7 @@ export default async function Index({
   const allRevisions = await getRevisionsByPostId(supabase, params.write)
 
   return (
-    <StandardResponsivePage isSupabaseConnected={profile != null} profile={profile} className='resize-x overflow-auto max-w-[min(100%,56rem)] lg:w-7/12'>
+    <StandardResponsivePage isSupabaseConnected={profile != null} profile={profile} className='resize-x max-w-[min(100%,56rem)] lg:w-7/12 items-stretch overflow-visible h-auto'>
       <Suspense fallback={<div>Loading...</div>}>
 
         <RevisionsEditorBar revisions={allRevisions} currentRevisionId={revision.id} currentPostId={params.write} />

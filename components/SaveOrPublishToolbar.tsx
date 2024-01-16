@@ -24,7 +24,7 @@ export default function SaveOrPublishToolbar({
   }
 
   return (
-    <FixedBottomToolbar>
+    <FixedBottomToolbar className="my-4">
       {canViewRevisions ? <Link href={`/write/${post?.id}/${post?.revision_id}`} className="text-sm font-semibold text-gray-500 dark:text-gray-100 mr-auto ml-2">
         View Revisions
       </Link> : <div className="mr-auto"></div>}

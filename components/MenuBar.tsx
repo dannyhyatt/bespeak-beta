@@ -5,12 +5,14 @@ import React from 'react'
 
 
 import '../src/styles/editor.css'
-import { IconArrowBackUp, IconArrowForwardUp, IconBlockquote, IconBold, IconClearFormatting, IconCode, IconH2, IconH3, IconH4, IconH5, IconH6, IconHeading, IconItalic, IconLetterP, IconList, IconListNumbers, IconSourceCode, IconSpacingVertical, IconStrikethrough } from '@tabler/icons-react'
+import { IconAd, IconArrowBackUp, IconArrowForwardUp, IconBlockquote, IconBold, IconCaretDown, IconCaretDownFilled, IconClearFormatting, IconCode, IconH2, IconH3, IconH4, IconH5, IconH6, IconHeading, IconItalic, IconLetterP, IconLink, IconList, IconListNumbers, IconPlus, IconSourceCode, IconSpacingVertical, IconStrikethrough, IconUnderline, IconUnlink } from '@tabler/icons-react'
 
 export const MenuBar = () => {
   const { editor } = useCurrentEditor()
 
   const [activeDropdown, setActiveDropdown] = React.useState<string | null>(null)
+
+  const [linkText, setLinkText] = React.useState<string | null>(null)
 
   if (!editor) {
     return null
@@ -25,10 +27,12 @@ export const MenuBar = () => {
           [&>div>button] = dropdown button
           [&>div>div] = dropdown container
           [&>div>div>button] = buttons in dropdowns */}
-      <div className={`flex flex-wrap mb-4 border-2 rounded-md
+          
+      <div className={`flex flex-wrap my-4 border-2 rounded-md sticky top-20 bg-background z-10
                       [&>button]:m-1 [&>button]:p-1 [&>button.is-active]:bg-gray-300 [&>button]:min-w-[2rem] [&>button]:rounded-md
                       [&>button:hover]:bg-gray-200 [&>button]:flex [&>*]:justify-center
-                      [&>.divider]:h-6 [&>.divider]:border-l-2 [&>.divider]:my-2 [&>.divider]:border-gray-300 [&>.divider]:dark:border-gray-700
+                      [&>.divider]:h-6 [&>.divider]:border-l-2 [&>.divider]:my-2 [&>.divider]:mx-1
+                      [&>.divider]:border-gray-300 [&>.divider]:dark:border-gray-700
                       [&>div>button]:m-1 [&>div>button]:p-1 [&>div>button]:rounded-md
                       [&>div>button]:flex [&>div>button:hover]:bg-gray-200 [&>div>button]:gap-2
                       [&>div>div]:z-[100000]
@@ -61,6 +65,20 @@ export const MenuBar = () => {
           title="Italic"
         >
           <IconItalic />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          disabled={
+            !editor.can()
+              .chain()
+              .focus()
+              .toggleUnderline()
+              .run()
+          }
+          className={editor.isActive('italic') ? 'is-active' : ''}
+          title="Italic"
+        >
+          <IconUnderline />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleStrike().run()}
@@ -118,7 +136,7 @@ export const MenuBar = () => {
               editor.isActive('heading', { level: 4 }) ? <><IconH4 /> Heading 4</> :
               editor.isActive('heading', { level: 5 }) ? <><IconH5 /> Heading 5</> :
               editor.isActive('heading', { level: 6 }) ? <><IconH6 /> Heading 6</> : 'Formatting'
-            }
+            } <><IconCaretDownFilled size={16} className='self-center' /></>
           </button>
 
           <div className={`flex flex-col absolute bg-background border-2 rounded-md ${activeDropdown == 'formatting' ? '' : 'hidden'}`}>
@@ -233,6 +251,11 @@ export const MenuBar = () => {
               .undo()
               .run()
           }
+          className={!editor.can()
+            .chain()
+            .focus()
+            .undo()
+            .run() ? 'opacity-50' : ''}
           title='Undo'
         >
           <IconArrowBackUp />
@@ -246,17 +269,58 @@ export const MenuBar = () => {
               .redo()
               .run()
           }
+          className={!editor.can()
+            .chain()
+            .focus()
+            .redo()
+            .run() ? 'opacity-50' : ''}
           title='Redo'
         >
           <IconArrowForwardUp />
         </button>
-        <span className="divider"></span>
+        {/* <span className="divider"></span>
         <button
           onClick={() => editor.chain().focus().setColor('#958DF1').run()}
           className={editor.isActive('textStyle', { color: '#958DF1' }) ? 'is-active' : ''}
         >
           purple
-        </button>
+        </button> */}
+        <span className="divider"></span>
+        <div className='relative'>
+          <button
+            onClick={() => {
+              if(activeDropdown == 'link') {
+                setActiveDropdown(null)
+              } else {
+                setActiveDropdown('link')
+                setLinkText(editor.getAttributes('link').href)
+              }
+            }}
+            title='Set Link'
+          >
+            <IconLink /> <IconCaretDownFilled size={16} className='self-center' />
+          </button>
+          <div className={`flex absolute bg-background border-2 rounded-md ${activeDropdown == 'link' ? '' : 'hidden'}`}>
+            <input type='text' placeholder='https://website.com' className='p-1 m-1 rounded-md' 
+              onChange={(e) => {
+                setLinkText(e.target.value)
+              }}
+              value={linkText ?? editor.getAttributes('link').href ?? ''} 
+            />
+            <button
+              onClick={() => {
+                setActiveDropdown(null)
+                if(editor.getAttributes('link').href == linkText || !linkText)
+                  editor.chain().focus().unsetLink().run()
+                else
+                  editor.chain().focus().setLink({ href: linkText }).run()
+              }}
+              title='Unset Link'
+            >
+              {editor.getAttributes('link').href != linkText ? <IconLink /> : <IconUnlink /> }
+            </button>
+          </div>
+        </div>
       </div>
     </>
   )

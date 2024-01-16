@@ -34,7 +34,9 @@ export default async function Index({
         <img className="inline h-8 rounded-sm align-middle" src={post.avatar_url} />
         <span className="align-middle">{post.avatar_url ? ' ' : ''}{post.author_name}</span>
       </Link>
-      {post?.content && <div dangerouslySetInnerHTML={{ __html: post.content }}></div>}
+      {post?.content && <div 
+        className='prose-base sm:prose-lg dark:prose-invert focus:outline-none'
+        dangerouslySetInnerHTML={{ __html: post.content }}></div>}
 
       <BottomPostBar />
 

@@ -31,7 +31,7 @@ export default function PostTitleField({
           onChange(value)
         }
       }}
-      className={`bg-transparent cursor-text outline-none overflow-visible text-2xl px-[10px] mb-4 font-semibold resize-none`} 
+      className={`bg-transparent cursor-text outline-none overflow-visible text-2xl mx-4 mb-4 font-semibold resize-none`} 
       spellCheck={false} 
       placeholder={`Your title...`}  value={value} onKeyUp={(e) => onChange(e.currentTarget.value)}/>
   )
