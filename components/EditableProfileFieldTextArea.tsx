@@ -56,7 +56,7 @@ export default function EditableProfileFieldTextArea({
     <>
       <span onBlur={saveField} className={`${className} flex items-center font-bold bg-transparent cursor-text outline-none overflow-visible`}>
         <input onChange={handleTyping} disabled={disabled}
-          className={`bg-transparent cursor-text outline-none overflow-visible w-[calc(100%_-_calc(40px_+_1.5rem))]`} 
+          className={`bg-transparent cursor-text outline-none overflow-visible w-[calc(100%_-_calc(40px_+_1.5rem))] opacity-100`} 
           spellCheck={false}
           placeholder={placeholder ?? `No ${displayFieldName.toLowerCase()} (yet!)`}  value={value} onKeyDown={(e) => {
             if (e.key === 'Enter') {

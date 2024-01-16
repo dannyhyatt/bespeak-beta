@@ -152,11 +152,13 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
   return (
     <>
       <PostTitleField onChange={changeTitle} initialValue={initialTitle} />
+      <div className="flex-grow">
       <EditorProvider 
         injectCSS={true} slotBefore={<MenuBar />} extensions={extensions} content={post?.content} 
         editorProps={editorProps} onUpdate={({editor}) => {
           getHTML = editor.getHTML.bind(editor)
         }} >{' '}</EditorProvider>
+      </div>
       <SaveOrPublishToolbar
         canViewRevisions={post != null}
         post={post}

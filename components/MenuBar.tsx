@@ -29,15 +29,17 @@ export const MenuBar = () => {
           [&>div>div>button] = buttons in dropdowns */}
           
       <div className={`flex flex-wrap my-4 border-2 rounded-md sticky top-20 bg-background z-10
-                      [&>button]:m-1 [&>button]:p-1 [&>button.is-active]:bg-gray-300 [&>button]:min-w-[2rem] [&>button]:rounded-md
-                      [&>button:hover]:bg-gray-200 [&>button]:flex [&>*]:justify-center
+                      [&>button]:m-1 [&>button]:p-1 [&>button.is-active]:bg-gray-300 [&>button.is-active]:dark:bg-gray-600 [&>button]:min-w-[2rem] [&>button]:rounded-md
+                      [&>button:hover]:bg-gray-200 [&>button:hover]:dark:bg-gray-700 [&>button]:flex [&>*]:justify-center
                       [&>.divider]:h-6 [&>.divider]:border-l-2 [&>.divider]:my-2 [&>.divider]:mx-1
                       [&>.divider]:border-gray-300 [&>.divider]:dark:border-gray-700
                       [&>div>button]:m-1 [&>div>button]:p-1 [&>div>button]:rounded-md
-                      [&>div>button]:flex [&>div>button:hover]:bg-gray-200 [&>div>button]:gap-2
+                      [&>div>button]:flex [&>div>button:hover]:bg-gray-200 [&>div>button:hover]:dark:bg-gray-700 [&>div>button]:gap-2
                       [&>div>div]:z-[100000]
-                      [&>div>div>button]:flex [&>div>div>button]:gap-2 [&>div>div>button]:p-1 [&>div>div>button]:m-1 [&>div>div>button.is-active]:bg-gray-300
-                      [&>div>div>button:hover:not(.is-active)]:bg-gray-200 [&>div>div>button]:rounded-md [&>div>div>button:hover]:z-auto`} id="toolbar">
+                      [&>div>div>button]:flex [&>div>div>button]:gap-2 [&>div>div>button]:p-1 [&>div>div>button]:m-1
+                      [&>div>div>button.is-active]:bg-gray-300 [&>div>div>button.is-active]:dark:bg-gray-600
+                      [&>div>div>button:hover:not(.is-active)]:bg-gray-200 [&>div>div>button:hover:not(.is-active)]:dark:bg-gray-700
+                      [&>div>div>button]:rounded-md [&>div>div>button:hover]:z-auto`} id="toolbar">
         <button
           onClick={() => editor.chain().focus().toggleBold().run()}
           disabled={
@@ -301,7 +303,7 @@ export const MenuBar = () => {
             <IconLink /> <IconCaretDownFilled size={16} className='self-center' />
           </button>
           <div className={`flex absolute bg-background border-2 rounded-md ${activeDropdown == 'link' ? '' : 'hidden'}`}>
-            <input type='text' placeholder='https://website.com' className='p-1 m-1 rounded-md' 
+            <input type='text' placeholder='https://website.com' className='p-1 m-1 rounded-md bg-background' 
               onChange={(e) => {
                 setLinkText(e.target.value)
               }}

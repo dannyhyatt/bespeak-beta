@@ -35,7 +35,7 @@ export default async function Index({
         <span className="align-middle">{post.avatar_url ? ' ' : ''}{post.author_name}</span>
       </Link>
       {post?.content && <div 
-        className='prose-base sm:prose-lg dark:prose-invert focus:outline-none'
+        className='prose-base sm:prose-lg dark:prose-invert focus:outline-none flex-grow'
         dangerouslySetInnerHTML={{ __html: post.content }}></div>}
 
       <BottomPostBar />
