@@ -13,27 +13,20 @@ const corsHeaders = {
 }
 
 const sanitizeConfig = {
-  allowedTags: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code', 'pre', 'span'],
+  allowedTags: ['b', 'i', 'em', 'strong', 's', 'a', 'p', 'br', 'ul', 'ol', 'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code', 'pre', 'span'],
   allowedClasses: {
     '*' : [],
-    'p' : ['editor-paragraph'],
-    'h1' : ['editor-heading-h1'],
-    'h2' : ['editor-heading-h2'],
-    'ul' : ['editor-list-ul'],
-    'ol' : ['editor-list-ol'],
-    'li' : ['editor-listitem'],
-    'blockquote' : ['editor-quote'],
-    'pre' : []
   },
   allowedAttributes: {
-    'p' : ['dir'],
-    'h1' : ['dir'],
-    'h2' : ['dir'],
-    'li' : ['value'],
+    '*': ['style'],
     'a' : ['href', 'target', 'rel'],
-    'blockquote' : ['dir'],
     'pre' : ['spellcheck', 'data-highlight-language']
   },
+  allowedStyles: {
+    '*': {
+      'text-align': [/^left$/, /^right$/, /^center$/, /^justify$/],
+    }
+  }
 };
 
 Deno.serve(async (req) => {

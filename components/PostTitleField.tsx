@@ -5,6 +5,7 @@ import Profile from '@/utils/supabase/api/profile'
 import { createClient } from '@/utils/supabase/client'
 import { useState } from 'react'
 import ReactTextareaAutosize from 'react-textarea-autosize'
+import { PostTitleCSS } from './CSSConsts'
 
 export default function PostTitleField({
   onChange, initialValue, post, className, autofocus
@@ -31,7 +32,7 @@ export default function PostTitleField({
           onChange(value)
         }
       }}
-      className={`bg-transparent cursor-text outline-none overflow-visible text-2xl mx-4 mb-4 font-semibold resize-none`} 
+      className={PostTitleCSS + ' ' + className} 
       spellCheck={false} 
       placeholder={`Your title...`}  value={value} onKeyUp={(e) => onChange(e.currentTarget.value)}/>
   )

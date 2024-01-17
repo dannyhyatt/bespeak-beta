@@ -1,7 +1,6 @@
 import Profile from "@/utils/supabase/api/profile";
 import DefaultFooter from "./DefaultFooter";
 import DefaultTopBar from "./DefaultTopBar";
-import "../src/styles/lexical.css";
 
 interface StandardResponsivePageProps {
   children: React.ReactNode;

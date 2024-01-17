@@ -29,6 +29,8 @@ import { lowlight } from "lowlight/lib/common.js"
 import { EditorProps } from '@tiptap/pm/view'
 import CodeBlockComponent from './plugins/CodeBlockComponent'
 import SaveOrPublishToolbar from './SaveOrPublishToolbar'
+import { PostContentCSS } from './CSSConsts'
+import TextAlign from '@tiptap/extension-text-align'
 
 // lowlight.registerLanguage('html', html)
 // lowlight.registerLanguage('css', css)
@@ -65,7 +67,10 @@ const extensions = [
     addNodeView() {
       return ReactNodeViewRenderer(CodeBlockComponent);
     }
-  }).configure({ lowlight })
+  }).configure({ lowlight }),
+  TextAlign.configure({
+    types: ['heading', 'paragraph'],
+  }),
 ]
 
 export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
@@ -86,7 +91,7 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
   let getHTML: Function | undefined
 
 
-  const saveHandler = async () => {
+  const saveHandler = async ({ publish } : { publish?: boolean }) => {
     
     if(getHTML == undefined) return
     console.log('get html not undefined')
@@ -102,6 +107,8 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
       postId = await createPost(client)
     }
 
+    console.log('post id:', postId)
+
     const body = { title: currentTitle, content: currentHtml, postId: postId }
     console.log('sending body', body)
     const {data, error} = await client.functions.invoke('upload_revision', {
@@ -113,21 +120,26 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
       return
     }
 
+    console.log('received data', data)
+
     const revisionId = data[0]?.id
 
-    if(revisionId) {
+    if(revisionId && publish) {
       await updatePostRevision(client, postId, revisionId)
     }
 
     // const revision = await createRevision(client, postId, currentTitle, currentHtml)
 
-    if(revisionId) {
+    if(publish) {
+      router.push(`/post/${postId}`)
+      router.refresh()
+    } else if(revisionId) {
       console.log('revision created')
       console.log('hello???')
       router.push(`/write/${postId}`)
     } else {
       console.log('revision failed')
-    }    
+    }
   }
 
   const changeTitle = (newTitle: string) => {
@@ -138,7 +150,7 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
 
   const editorProps: EditorProps = {
     attributes: {
-      class: 'prose-base dark:prose-invert m-4 focus:outline-none',
+      class: PostContentCSS,
     },
     handleKeyDown: (e) => {
       if(window.scrollY + window.innerHeight + 100 > document.documentElement.scrollHeight) {
@@ -164,11 +176,8 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
         post={post}
         canPublish={true}
         canSave={true}
-        onPublish={async () => {
-          await new Promise((resolve) => setTimeout(resolve, 5000));
-          // Your publish logic here
-        }}
-        onSave={saveHandler}
+        onSave={() => saveHandler({ publish: false})}
+        onPublish={() => saveHandler({ publish: true})}
       />
     </>
   )

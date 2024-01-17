@@ -5,7 +5,7 @@ import { Suspense } from 'react'
 import ArticleEditor from '@/components/ArticleEditor'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { getPostDataForPageById } from '@/utils/supabase/api/post'
+import { getPostDataForPageById, getPostDataWithMostRecentRevision } from '@/utils/supabase/api/post'
 
 export default async function Index({
   params
@@ -18,7 +18,9 @@ export default async function Index({
 
   if(!profile) return redirect('/login')
 
-  const post = await getPostDataForPageById(supabase, params.write)
+  const post = await getPostDataWithMostRecentRevision(supabase, params.write)
+  
+  console.log('post', post)
 
   return (
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile} className='resize-x max-w-[min(100%,56rem)] lg:w-7/12 items-stretch overflow-visible h-auto'>

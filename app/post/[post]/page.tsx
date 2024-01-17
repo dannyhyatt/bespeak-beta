@@ -6,7 +6,7 @@ import StandardResponsivePage from '@/components/StandardResponsivePage'
 import { getPostDataForPageById } from '@/utils/supabase/api/post'
 import Link from 'next/link'
 import BottomPostBar from '@/components/BottomPostBar'
-import { LinkCSS } from '@/components/CSSConsts'
+import { LinkCSS, PostContentCSS, PostTitleCSS } from '@/components/CSSConsts'
 
 export default async function Index({
   params
@@ -24,9 +24,9 @@ export default async function Index({
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile} className='lg:w-7/12'>
 
       {profile?.id == post.author_id &&
-        <span className='mb-8'>This is your post. Click <Link href={`/write/${post.id}`} className={LinkCSS}>here</Link> to edit it.</span>}
+        <span className='mb-8 italic'>This is your post. Click <Link href={`/write/${post.id}`} className={LinkCSS}>here</Link> to edit it.</span>}
 
-      <h1 className={`bg-transparent cursor-text outline-none overflow-visible text-2xl mb-1 font-semibold resize-none dark:text-white`}>
+      <h1 className={PostTitleCSS}>
         {post?.title}
       </h1>
       <Link className="text-lg mb-3" href={`/@${post.username}`}>
@@ -35,7 +35,7 @@ export default async function Index({
         <span className="align-middle">{post.avatar_url ? ' ' : ''}{post.author_name}</span>
       </Link>
       {post?.content && <div 
-        className='prose-base sm:prose-lg dark:prose-invert focus:outline-none flex-grow'
+        className={PostContentCSS}
         dangerouslySetInnerHTML={{ __html: post.content }}></div>}
 
       <BottomPostBar />

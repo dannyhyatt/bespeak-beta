@@ -101,6 +101,35 @@ export const getPostDataForPageById = async (supabase: SupabaseClient, id: strin
   return post
 }
 
+export const getPostDataWithMostRecentRevision = async (supabase: SupabaseClient, id: string) => {
+  const { data, error } = await supabase
+    .from('post_revisions')
+    .select('*, posts!post_revisions_post_id_fkey(id, author_id, tags, created_at)')
+    .eq('post_id', id)
+    .order('created_at', { ascending: false })
+    .limit(1)
+
+  console.log("received:::", data, error)
+
+  if(!data || data.length === 0) throw new Error('No data found')
+
+  const post = {
+    id: data[0].post_id,
+    author_id: data[0].posts.author_id,
+    revision_id: data[0].id,
+    tags: data[0].posts.tags,
+    created_at: data[0].posts.created_at,
+    title: data[0].title,
+    content: data[0].content,
+  } as PostWithRevision
+
+  if (error) throw error
+
+  console.log('returning post data', post)
+
+  return post
+}
+
 export const getPostsByAuthorId = async (supabase: SupabaseClient, authorId: string, offset?: number, orderBy?: string) => {
   const { data, error } = await supabase
     .from('posts_with_revision')
