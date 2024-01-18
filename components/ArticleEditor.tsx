@@ -69,7 +69,7 @@ const extensions = [
       code.innerHTML = toHtml(lowlight.highlight('js', node.textContent))
       return pre
     }
-  }).configure({ lowlight, languageClassPrefix: 'language-', }),
+  }).configure({ lowlight }),
   TextAlign.configure({
     types: ['heading', 'paragraph'],
   }),
