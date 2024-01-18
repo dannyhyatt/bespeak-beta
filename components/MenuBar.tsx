@@ -5,7 +5,7 @@ import React from 'react'
 
 
 import '../src/styles/editor.css'
-import { IconAd, IconAlignCenter, IconAlignJustified, IconAlignLeft, IconAlignRight, IconArrowBackUp, IconArrowForwardUp, IconBlockquote, IconBold, IconCaretDown, IconCaretDownFilled, IconClearFormatting, IconCode, IconH2, IconH3, IconH4, IconH5, IconH6, IconHeading, IconItalic, IconLetterP, IconLink, IconList, IconListNumbers, IconPlus, IconSourceCode, IconSpacingVertical, IconStrikethrough, IconUnderline, IconUnlink } from '@tabler/icons-react'
+import { IconAd, IconAlignCenter, IconAlignJustified, IconAlignLeft, IconAlignRight, IconArrowBackUp, IconArrowForwardUp, IconBlockquote, IconBold, IconCaretDown, IconCaretDownFilled, IconClearFormatting, IconCode, IconFrame, IconH2, IconH3, IconH4, IconH5, IconH6, IconHeading, IconItalic, IconLetterP, IconLink, IconList, IconListNumbers, IconPlus, IconSourceCode, IconSpacingVertical, IconSquarePlus, IconStrikethrough, IconUnderline, IconUnlink } from '@tabler/icons-react'
 
 export const MenuBar = () => {
   const { editor } = useCurrentEditor()
@@ -122,6 +122,68 @@ export const MenuBar = () => {
           clear nodes
         </button> */}
         {/* formatting dropdown */}
+        <span className="divider"></span>
+
+        <div className='relative'>
+          <button onClick={(e) => {
+            if(activeDropdown == AlignmentDropdown) {
+              setActiveDropdown(null)
+            } else {
+              setActiveDropdown(AlignmentDropdown)
+            }
+          }}
+          >
+            {
+              editor.isActive({ textAlign: 'left' }) ? <IconAlignLeft /> :
+              editor.isActive({ textAlign: 'center' }) ? <IconAlignCenter /> :
+              editor.isActive({ textAlign: 'right' }) ? <IconAlignRight /> :
+              editor.isActive({ textAlign: 'justify' }) ? <IconAlignJustified /> : 'Alignment'
+            } <><IconCaretDownFilled size={16} className='self-center' /></>
+          </button>
+
+          <div className={`flex flex-col absolute bg-background border-2 rounded-md ${activeDropdown == AlignmentDropdown ? '' : 'hidden'}`}>
+            <button
+              onClick={() => {
+                setActiveDropdown(null)
+                editor.chain().focus().setTextAlign('left').run()
+              }}
+              className={editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''}
+              title="Left Align"
+            >
+              <IconAlignLeft />
+            </button>
+            <button
+              onClick={() => {
+                setActiveDropdown(null)
+                editor.chain().focus().setTextAlign('center').run()
+              }}
+              className={editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''}
+              title="Center Align"
+            >
+              <IconAlignCenter />
+            </button>
+            <button
+              onClick={() => {
+                setActiveDropdown(null)
+                editor.chain().focus().setTextAlign('right').run()
+              }}
+              className={editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''}
+              title="Right Align"
+            >
+              <IconAlignRight />
+            </button>
+            <button
+              onClick={() => {
+                setActiveDropdown(null)
+                editor.chain().focus().setTextAlign('justify').run()
+              }}
+              className={editor.isActive({ textAlign: 'justify' }) ? 'is-active' : ''}
+              title="Justify"
+            >
+              <IconAlignJustified />
+            </button>
+          </div>
+        </div>
         <span className="divider"></span>
         <div className='relative'>
           <button onClick={(e) => {
@@ -325,67 +387,16 @@ export const MenuBar = () => {
             </button>
           </div>
         </div>
-        <span className="divider"></span>
-        <div className='relative'>
-          <button onClick={(e) => {
-            if(activeDropdown == AlignmentDropdown) {
-              setActiveDropdown(null)
-            } else {
-              setActiveDropdown(AlignmentDropdown)
-            }
-          }}
-          >
-            {
-              editor.isActive({ textAlign: 'left' }) ? <IconAlignLeft /> :
-              editor.isActive({ textAlign: 'center' }) ? <IconAlignCenter /> :
-              editor.isActive({ textAlign: 'right' }) ? <IconAlignRight /> :
-              editor.isActive({ textAlign: 'justify' }) ? <IconAlignJustified /> : 'Alignment'
-            } <><IconCaretDownFilled size={16} className='self-center' /></>
-          </button>
 
-          <div className={`flex flex-col absolute bg-background border-2 rounded-md ${activeDropdown == AlignmentDropdown ? '' : 'hidden'}`}>
-            <button
-              onClick={() => {
-                setActiveDropdown(null)
-                editor.chain().focus().setTextAlign('left').run()
-              }}
-              className={editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''}
-              title="Left Align"
-            >
-              <IconAlignLeft />
-            </button>
-            <button
-              onClick={() => {
-                setActiveDropdown(null)
-                editor.chain().focus().setTextAlign('center').run()
-              }}
-              className={editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''}
-              title="Center Align"
-            >
-              <IconAlignCenter />
-            </button>
-            <button
-              onClick={() => {
-                setActiveDropdown(null)
-                editor.chain().focus().setTextAlign('right').run()
-              }}
-              className={editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''}
-              title="Right Align"
-            >
-              <IconAlignRight />
-            </button>
-            <button
-              onClick={() => {
-                setActiveDropdown(null)
-                editor.chain().focus().setTextAlign('justify').run()
-              }}
-              className={editor.isActive({ textAlign: 'justify' }) ? 'is-active' : ''}
-              title="Justify"
-            >
-              <IconAlignJustified />
-            </button>
-          </div>
-        </div>
+        <span className="divider"></span>
+
+        <button
+          onClick={() => editor.chain().focus().setIframe({ src: window.prompt('What Url?') ?? 'youtube.com' }).run()}
+          title='Insert Frame'
+        >
+          <IconSquarePlus />
+        </button>
+
       </div>
     </>
   )

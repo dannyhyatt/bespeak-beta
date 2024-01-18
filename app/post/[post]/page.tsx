@@ -8,6 +8,8 @@ import Link from 'next/link'
 import BottomPostBar from '@/components/BottomPostBar'
 import { LinkCSS, PostContentCSS, PostTitleCSS } from '@/components/CSSConsts'
 
+import '../../../src/styles/editor.css'
+
 export default async function Index({
   params
 } : { params: { post: string } }) {
@@ -35,7 +37,7 @@ export default async function Index({
         <span className="align-middle">{post.avatar_url ? ' ' : ''}{post.author_name}</span>
       </Link>
       {post?.content && <div 
-        className={PostContentCSS}
+        className={`${PostContentCSS} tiptap`}
         dangerouslySetInnerHTML={{ __html: post.content }}></div>}
 
       <BottomPostBar />

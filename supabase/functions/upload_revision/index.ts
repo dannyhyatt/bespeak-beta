@@ -13,18 +13,23 @@ const corsHeaders = {
 }
 
 const sanitizeConfig = {
-  allowedTags: ['b', 'i', 'em', 'strong', 's', 'a', 'p', 'br', 'ul', 'ol', 'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code', 'pre', 'span'],
+  allowedTags: ['b', 'i', 'em', 'strong', 's', 'a', 'p', 'br', 'ul', 'ol', 'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code', 'pre', 'span', 'hr', 'img'],
   allowedClasses: {
     '*' : [],
+    'span' : ['hljs-*']
   },
   allowedAttributes: {
     '*': ['style'],
     'a' : ['href', 'target', 'rel'],
-    'pre' : ['spellcheck', 'data-highlight-language']
+    'pre' : ['spellcheck', 'data-highlight-language'],
+    'code' : ['as']
   },
   allowedStyles: {
     '*': {
       'text-align': [/^left$/, /^right$/, /^center$/, /^justify$/],
+    },
+    'div': {
+      'white-space': [/^pre$/, /^pre-wrap$/, /^pre-line$/, /^inherit$/],
     }
   }
 };

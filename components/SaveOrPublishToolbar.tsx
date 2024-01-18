@@ -37,7 +37,7 @@ export default function SaveOrPublishToolbar({
       <button onClick={saveHandler} className={`bg-gray-500 text-white text-sm font-semibold px-3 py-2 rounded-md mr-2 ${canSave ? '' : 'opacity-30 cursor-not-allowed'}`} disabled={!canSave}>
         {saveText}
       </button>
-      <button onClick={publishHandler} className={`bg-black text-white text-sm font-semibold px-3 py-2 rounded-md ${canPublish ? '' : 'opacity-30 cursor-not-allowed'}`} disabled={!canPublish}>
+      <button onClick={publishHandler} className={`bg-gray-700 text-white text-sm font-semibold px-3 py-2 rounded-md ${canPublish ? '' : 'opacity-30 cursor-not-allowed'}`} disabled={!canPublish}>
         {publishText}
       </button>
     </FixedBottomToolbar>

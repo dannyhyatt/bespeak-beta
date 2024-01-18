@@ -1,22 +1,23 @@
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react'
 import React from 'react'
+import { aliasList } from './Lowlight'
 
 export default ({ node: { attrs: { language: defaultLanguage } }, updateAttributes, extension }) => (
   <NodeViewWrapper className="code-block relative">
-    {/* <select className="absolute right-2 top-2"
+    <select className="absolute right-2 top-2 bg-background text-foreground"
       contentEditable={false} defaultValue={defaultLanguage} onChange={event => updateAttributes({ language: event.target.value })}>
       <option value="null">
-        auto
+        Auto
       </option>
       <option disabled>
         —
       </option>
-      {extension.options.lowlight.listLanguages().map((lang, index) => (
+      {aliasList.map((lang, index) => (
         <option key={index} value={lang}>
           {lang}
         </option>
       ))}
-    </select> */}
+    </select>
     <pre>
       <NodeViewContent as="code" />
     </pre>

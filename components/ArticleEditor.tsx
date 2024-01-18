@@ -19,23 +19,15 @@ import Placeholder from '@tiptap/extension-placeholder'
 import Link from '@tiptap/extension-link'
 import Underline from '@tiptap/extension-underline'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
-
-import css from 'highlight.js/lib/languages/css'
-import js from 'highlight.js/lib/languages/javascript'
-import ts from 'highlight.js/lib/languages/typescript'
-import html from 'highlight.js/lib/languages/xml'
-// load all highlight.js languages
-import { lowlight } from "lowlight/lib/common.js"
 import { EditorProps } from '@tiptap/pm/view'
 import CodeBlockComponent from './plugins/CodeBlockComponent'
 import SaveOrPublishToolbar from './SaveOrPublishToolbar'
 import { PostContentCSS } from './CSSConsts'
 import TextAlign from '@tiptap/extension-text-align'
+import IFramePlugin from './plugins/IFramePlugin'
+import lowlight from './plugins/Lowlight'
+import { toHtml } from 'hast-util-to-html'
 
-// lowlight.registerLanguage('html', html)
-// lowlight.registerLanguage('css', css)
-// lowlight.registerLanguage('js', js)
-// lowlight.registerLanguage('ts', ts)
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -66,11 +58,22 @@ const extensions = [
   CodeBlockLowlight.extend({
     addNodeView() {
       return ReactNodeViewRenderer(CodeBlockComponent);
+    },
+    renderHTML({ node, HTMLAttributes }) {
+      let pre = document.createElement('pre')
+      let code = document.createElement('code')
+      pre.appendChild(code)
+      code.dataset.type = 'raw'
+      // console.log('node', node)
+      // console.log('html attributes', HTMLAttributes)
+      code.innerHTML = toHtml(lowlight.highlight('js', node.textContent))
+      return pre
     }
-  }).configure({ lowlight }),
+  }).configure({ lowlight, languageClassPrefix: 'language-', }),
   TextAlign.configure({
     types: ['heading', 'paragraph'],
   }),
+  IFramePlugin,
 ]
 
 export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
