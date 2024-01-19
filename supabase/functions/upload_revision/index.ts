@@ -16,7 +16,8 @@ const sanitizeConfig = {
   allowedTags: ['b', 'i', 'em', 'strong', 's', 'a', 'p', 'br', 'ul', 'ol', 'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code', 'pre', 'span', 'hr', 'img'],
   allowedClasses: {
     '*' : [],
-    'span' : ['hljs-*']
+    'span' : ['hljs-*'],
+    'code' : ['language-*']
   },
   allowedAttributes: {
     '*': ['style'],

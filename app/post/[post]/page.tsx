@@ -40,7 +40,7 @@ export default async function Index({
         className={`${PostContentCSS} tiptap`}
         dangerouslySetInnerHTML={{ __html: post.content }}></div>}
 
-      <BottomPostBar />
+      <BottomPostBar post={post} />
 
     </StandardResponsivePage>
   )

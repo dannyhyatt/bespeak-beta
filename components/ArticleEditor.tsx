@@ -27,6 +27,7 @@ import TextAlign from '@tiptap/extension-text-align'
 import IFramePlugin from './plugins/IFramePlugin'
 import lowlight from './plugins/Lowlight'
 import { toHtml } from 'hast-util-to-html'
+import CollaboratorsModal from './CollaboratorsModal'
 
 
 const extensions = [
@@ -55,21 +56,30 @@ const extensions = [
     },
   }),
   Underline.configure(),
-  CodeBlockLowlight.extend({
+  CodeBlockLowlight
+  .extend({
     addNodeView() {
       return ReactNodeViewRenderer(CodeBlockComponent);
     },
+    // addAttributes() {
+    //   return {
+    //     defaultLanguage: {
+    //       parseHTML: element => element.getAttribute('class')?.substring('language-'.length),
+    //     }
+    //   }
+    // },
     renderHTML({ node, HTMLAttributes }) {
       let pre = document.createElement('pre')
       let code = document.createElement('code')
       pre.appendChild(code)
       code.dataset.type = 'raw'
-      // console.log('node', node)
-      // console.log('html attributes', HTMLAttributes)
+      console.log('node', node)
+      console.log('html attributes', HTMLAttributes)
       code.innerHTML = toHtml(lowlight.highlight('js', node.textContent))
       return pre
     }
-  }).configure({ lowlight }),
+  })
+  .configure({ lowlight }),
   TextAlign.configure({
     types: ['heading', 'paragraph'],
   }),
@@ -84,6 +94,8 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
 
   const [canPublish, setCanPublish] = useState<boolean>(false)
   const [canSave, setCanSave] = useState<boolean>(false)
+
+  const [collaboratorsModalOpen, setCollaboratorsModalOpen] = useState<boolean>(false)
 
   let initialTitle: string | undefined = post?.title
   let currentTitle: string = initialTitle || ''
@@ -182,6 +194,8 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
         onSave={() => saveHandler({ publish: false})}
         onPublish={() => saveHandler({ publish: true})}
       />
+
+      {collaboratorsModalOpen && <CollaboratorsModal post={post} />}
     </>
   )
 }

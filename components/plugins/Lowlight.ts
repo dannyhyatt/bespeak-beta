@@ -24,7 +24,31 @@ import swift from 'highlight.js/lib/languages/swift'
 import ts from 'highlight.js/lib/languages/typescript'
 import yaml from 'highlight.js/lib/languages/yaml'
 
-const aliasList = ['Bash','C','C++','C#','CSS','Dart','Go','HTML','Java','JavaScript','JSON','Kotlin','Markdown','PHP','Plain Text', 'PostgreSQL', 'Python','Ruby','Rust','SQL','Swift','TypeScript','YAML'];
+const aliasMap: Record<string, string> = {
+  'Bash': 'bash',
+  'C': 'c',
+  'C++': 'cpp',
+  'C#': 'csharp',
+  'CSS': 'css',
+  'Dart': 'dart',
+  'Go': 'go',
+  'HTML': 'html',
+  'Java': 'java',
+  'JavaScript': 'js',
+  'JSON': 'json',
+  'Kotlin': 'kotlin',
+  'Markdown': 'markdown',
+  'PHP': 'php',
+  'Plain Text': 'plaintext',
+  'PostgreSQL': 'pgsql',
+  'Python': 'python',
+  'Ruby': 'ruby',
+  'Rust': 'rust',
+  'SQL': 'sql',
+  'Swift': 'swift',
+  'TypeScript': 'ts',
+  'YAML': 'yaml'
+};
 
 lowlight.registerLanguage('bash', bash)
 lowlight.registerLanguage('c', c)
@@ -50,29 +74,9 @@ lowlight.registerLanguage('swift', swift)
 lowlight.registerLanguage('ts', ts)
 lowlight.registerLanguage('yaml', yaml)
 
-lowlight.registerAlias('bash', 'Bash')
-lowlight.registerAlias('c', 'C')
-lowlight.registerAlias('cpp', 'C++')
-lowlight.registerAlias('csharp', 'C#')
-lowlight.registerAlias('css', 'CSS')
-lowlight.registerAlias('dart', 'Dart')
-lowlight.registerAlias('go', 'Go')
-lowlight.registerAlias('html', 'HTML')
-lowlight.registerAlias('java', 'Java')
-lowlight.registerAlias('js', 'JavaScript')
-lowlight.registerAlias('json', 'JSON')
-lowlight.registerAlias('kotlin', 'Kotlin')
-lowlight.registerAlias('markdown', 'Markdown')
-lowlight.registerAlias('php', 'PHP')
-lowlight.registerAlias('plaintext', 'Plain Text')
-lowlight.registerAlias('pgsql', 'PostgreSQL')
-lowlight.registerAlias('python', 'Python')
-lowlight.registerAlias('ruby', 'Ruby')
-lowlight.registerAlias('rust', 'Rust')
-lowlight.registerAlias('sql', 'SQL')
-lowlight.registerAlias('swift', 'Swift')
-lowlight.registerAlias('ts', 'TypeScript')
-lowlight.registerAlias('yaml', 'YAML')
+for(var key in aliasMap) {
+  lowlight.registerAlias(key, aliasMap[key])
+}
 
 export default lowlight
-export { aliasList }
+export { aliasMap }

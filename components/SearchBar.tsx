@@ -10,7 +10,7 @@ export default function SearchBar({ initialSearchQuery }: { initialSearchQuery?:
   const [searchQuery, setSearchQuery] = useState<string>(initialSearchQuery ? decodeURI(initialSearchQuery) : '')
 
   return (
-    <div className="relative min-w-[16ch] focus-within:flex-grow focus-within:min-w-[24ch] max-w-sm transition-all">
+    <div className="relative sm:min-w-[16ch] w-[2.3rem] focus-within:flex-grow focus-within:min-w-[24ch] max-w-sm transition-all">
       <input value={searchQuery} 
         onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search" 
         onKeyUp={(e) => { if(e.key == 'Enter' && searchQuery) rounter.push(`/search/${e.currentTarget.value}`) }}
