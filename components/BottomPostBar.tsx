@@ -4,13 +4,16 @@ import { PostWithRevision } from "@/utils/supabase/api/post";
 import { BookmarkIcon, ChevronDownIcon, CommentIcon, ShareIcon, ThumbsDownIcon, ThumbsUpIcon } from "./Icons";
 import { IconCopy, IconCopyCheck, IconDotsVertical, IconLayoutNavbarExpand } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
+import CommentList from "./CommentsList";
 
 
-export default function BottomPostBar({ post } : { post?: PostWithRevision}) {
+export default function BottomPostBar({ post } : { post: PostWithRevision}) {
 
   const [expanded, setExpanded] = useState<boolean>(false)
   const [canShare, setCanShare] = useState<boolean>(false)
   const [showCopied, setShowCopied] = useState<boolean>(false)
+
+  const [showComments, setShowComments] = useState<boolean>(false)
 
   const shareArticle = () => {
     if (navigator.share) {
@@ -31,8 +34,9 @@ export default function BottomPostBar({ post } : { post?: PostWithRevision}) {
   }, [])
 
   return (
-    <div className={`flex flex-col transition-all sticky bottom-0 border-b-0  mt-8 mx-[-0.75rem] border-x-0 border-2 border-r-0 bg-background text-foreground 
-                    sm:mx-[-1rem] sm:px-2 sm:rounded-lg sm:border-b-0 sm:rounded-b-none sm:border-x-2
+    // todo make the height transition work when the comments are shown
+    <div className={`flex flex-col transition-all sticky bottom-[-0.25rem] ${showComments && 'bottom-2'} mt-8 mx-[-0.75rem] border-x-0 border-2 border-r-0 bg-background text-foreground 
+                    sm:mx-[-1rem] sm:px-2 sm:rounded-lg sm:border-x-2
                     pb-[max(calc(env(safe-area-inset-bottom)-8px),0px)]`}>
 
       <span className={`flex ${!expanded && 'hidden'}`}>
@@ -55,11 +59,22 @@ export default function BottomPostBar({ post } : { post?: PostWithRevision}) {
           <IconDotsVertical className="rotate-90" />
         </span>
         <span className="flex ml-auto">
-          <span className="p-2 m-1 hover:bg-gray-200 hover:dark:bg-gray-700 rounded-md cursor-pointer">Comments <ChevronDownIcon className="inline" /></span>
+          <span 
+            className="p-2 m-1 hover:bg-gray-200 hover:dark:bg-gray-700 rounded-md cursor-pointer"
+            onClick={() => setShowComments(!showComments)}
+          >
+            Comments <ChevronDownIcon className="inline" />
+          </span>
           <span className="p-2 m-1 hover:bg-gray-200 hover:dark:bg-gray-700 rounded-md cursor-pointer"><ThumbsUpIcon /></span>
           <span className="p-2 m-1 hover:bg-gray-200 hover:dark:bg-gray-700 rounded-md cursor-pointer"><ThumbsDownIcon /></span>
         </span>
       </span>
+
+      {
+        <span className={`${!showComments && 'hidden'}`}>
+        <CommentList replyToId={null} postId={post.id} />
+        </span>
+      }
     </div>
   )
 }

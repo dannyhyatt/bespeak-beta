@@ -3,3 +3,7 @@ export const LinkCSS = 'font-medium text-blue-600 dark:text-blue-500 hover:under
 export const PostTitleCSS = `bg-transparent cursor-text outline-none overflow-visible text-2xl mb-1 font-semibold resize-none dark:text-white`
 
 export const PostContentCSS = 'prose dark:prose-invert prose-base lg:prose-md focus:outline-none flex-grow [&>div>iframe]:w-full [&>div>iframe]:h-[150px]'
+
+export const ButtonCSS = 'flex gap-2 justify-center items-center hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded-md cursor-pointer'
+
+export const ActionButtonCSS = 'bg-gray-800 text-white font-semibold px-3 py-2 rounded-md mr-2'
