@@ -33,23 +33,24 @@ export default function CommentList({ replyToId, postId } : { replyToId?: string
   if(loading) return (<div className="ml-2">Loading...</div>);
 
   return (
-    <div className="flex flex-col my-2">
+    <div className="flex flex-col grow my-2 h-full">
 
-      {
-        comments.map((comment) => {
-          return (
-            <CommentDisplay comment={comment} key={`comment-${comment.id}`} />
-          )
-        }) 
-      }
+      <span className="grow flex flex-col overflow-y-scroll">
+        {
+          comments.map((comment) => {
+            return (
+              <CommentDisplay comment={comment} key={`comment-${comment.id}`} />
+            )
+          }) 
+        }
+      </span>
       
-      <div className="flex justify-center gap-2 mb-2 mx-2 items-end">
+      <div className="flex shrink justify-center gap-2 mb-4 mx-2 items-end">
 
         <ReactTextareaAutosize 
-          className="flex-grow p-2 rounded-md border-2" placeholder="Write a comment..." maxRows={5}
+          className="flex-grow p-2 rounded-md border-2 bg-background" placeholder="Write a comment..." maxRows={5}
           onChange={(e) => { setCommentText(e.target.value) }} value={commentText}
           onKeyDown={(e) => {
-            console.log('key down', e.key, e.metaKey);
             if(e.key == 'Enter' && e.metaKey) {
               createComment(client, postId, replyToId ?? null, commentText).then(() => {
                 setCommentText('')

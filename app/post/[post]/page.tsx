@@ -37,7 +37,7 @@ export default async function Index({
         <span className="align-middle">{post.avatar_url ? ' ' : ''}{post.author_name}</span>
       </Link>
       {post?.content && <div 
-        className={`${PostContentCSS} tiptap`}
+        className={`${PostContentCSS} prose-blockquote:before:content-none prose-blockquote:after:content-none`}
         dangerouslySetInnerHTML={{ __html: post.content }}></div>}
 
       <BottomPostBar post={post} />

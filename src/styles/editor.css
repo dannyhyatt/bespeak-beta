@@ -58,7 +58,7 @@
   color: black;
   font-family: "JetBrainsMono", monospace;
   padding: 0.75rem 1rem;
-  margin: 0.75rem -1rem;
+  margin: 0.75rem -0.75rem;
 }
 .tiptap pre code {
   background: none;

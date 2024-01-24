@@ -40,12 +40,12 @@ export default function SaveOrPublishToolbar({
               <IconHistory /> Revisions
             </span>
           </Link>
-          <span 
+          {/* <span 
             className="text-sm font-semibold text-gray-500 dark:text-gray-100 mr-auto ml-2">
             <span className={ButtonCSS}>
               <IconHistory /> Revisions
             </span>
-          </span>
+          </span> */}
         </>
         : <div className="mr-auto"></div>}
       <button onClick={saveHandler} className={`bg-gray-500 text-white text-sm font-semibold px-3 py-2 rounded-md mr-2 ${canSave ? '' : 'opacity-30 cursor-not-allowed'}`} disabled={!canSave}>
