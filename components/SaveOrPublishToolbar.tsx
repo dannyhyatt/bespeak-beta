@@ -35,7 +35,7 @@ export default function SaveOrPublishToolbar({
     <FixedBottomToolbar className="my-4 mx-[-0.5rem]">
       {canViewRevisions ? 
         <>
-          <Link href={`/write/${post?.id}/${post?.revision_id}`} className="text-sm font-semibold text-gray-500 dark:text-gray-100 ml-2">
+          <Link href={`/write/${post?.id}/${post?.revision_id}`} className="text-sm font-semibold text-gray-500 dark:text-gray-100 ml-2 mr-auto">
             <span className={ButtonCSS}>
               <IconHistory /> Revisions
             </span>

@@ -35,7 +35,7 @@ export default function BottomPostBar({ post } : { post: PostWithRevision}) {
 
   return (
     // todo make the height transition work when the comments are shown
-    <div className={`flex flex-col transition-all sticky bottom-[-0.25rem] ${showComments ? 'bottom-4' : 'sm:rounded-b-none'}  mt-8 mx-[-0.75rem] border-x-0 border-2 border-r-0 bg-background text-foreground 
+    <div className={`flex flex-col transition-all sticky ${showComments ? 'bottom-4' : 'sm:rounded-b-none bottom-[-0.25rem]'}  mt-8 mx-[-0.75rem] border-x-0 border-2 border-r-0 bg-background text-foreground 
                     sm:mx-[-1rem] sm:px-2 sm:rounded-lg sm:border-x-2
                     pb-[max(calc(env(safe-area-inset-bottom)-8px),0px)]`}>
 
@@ -81,10 +81,11 @@ export default function BottomPostBar({ post } : { post: PostWithRevision}) {
       </span>
 
       {
-        <span className={`${!showComments && 'h-0 transition-all'} h-[40vh] overflow-hidden`}>
+        <span className={`${!showComments ? 'h-0 transition-all' : 'h-[40vh]'} overflow-hidden`}>
           <CommentList replyToId={null} postId={post.id} />
         </span>
       }
+      
     </div>
   )
 }
