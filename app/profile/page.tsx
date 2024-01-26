@@ -23,7 +23,7 @@ export default async function Index() {
   return (
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile}>
       
-      <ProfileDisplay profile={profile} isCurrentProfile={true} />
+      <ProfileDisplay profile={profile} supabase={supabase} isCurrentProfile={true} />
       {/* <EditableProfileField className="font-bold text-4xl mb-1"
         profile={profile} displayFieldName="Name" dbField="full_name" initialValue={profile?.full_name} />
       <EditableProfileField className="before:content-['@'] text-xl text-gray-700 dark:text-gray-300 mb-4"

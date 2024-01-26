@@ -57,14 +57,14 @@ export default function EditableProfileField({
       <span onBlur={saveField} className={`${className} flex items-center font-bold bg-transparent cursor-text outline-none overflow-visible`}>
         <input onChange={handleTyping} disabled={disabled}
         // opacity 100 is a fix for safari
-          className={`bg-transparent cursor-text outline-none overflow-visible w-[calc(100%_-_calc(40px_+_1.5rem))] opacity-100`} 
+          className={`bg-transparent cursor-text outline-none overflow-visible opacity-100`} 
           spellCheck={false}
           placeholder={placeholder ?? `No ${displayFieldName.toLowerCase()} (yet!)`}  value={value} onKeyDown={(e) => {
             if (e.key === 'Enter') {
               saveField()
             }
           }}/>
-        <button onClick={saveField} className={`ml-auto font-bold bg-transparent outline-none inline align-bottom h-8 cursor-pointer ${showSaveButton ? 'visible' : 'invisible'}`}>
+        <button onClick={saveField} className={`font-bold bg-transparent outline-none inline align-bottom h-8 cursor-pointer ${showSaveButton ? 'visible' : 'invisible'}`}>
           <svg className="text-gray-500 hover:text-gray-900 transition-colors duration-200 w-6 h-6 mx-2 hover:stroke-2 "
               xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />

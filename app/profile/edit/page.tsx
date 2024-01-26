@@ -8,6 +8,7 @@ import PostList from '@/components/PostList'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Revision, Post, getPostsByAuthorId } from '@/utils/supabase/api/post'
 import ProfileDisplay from '@/components/ProfileDisplay'
+import UploadAvatar from '@/components/UploadAvatar'
 
 export default async function Index() {
   const cookieStore = cookies()
@@ -24,6 +25,8 @@ export default async function Index() {
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile}>
       
       <h1 className='mb-4'>Edit Your Profile</h1>
+
+      <UploadAvatar profile={profile} />
 
       <EditableProfileField className="font-bold text-4xl mb-1 underline"
         profile={profile} displayFieldName="Name" dbField="full_name" initialValue={profile?.full_name} />

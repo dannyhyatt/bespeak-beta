@@ -29,7 +29,7 @@ export interface PostWithRevision {
   cover_image?: string
   edited_at: string
   author_name: string
-  avatar_url: string
+  avatar: boolean
   username: string
 }
 

@@ -6,7 +6,7 @@ export default interface Profile {
   username: string;
   bio?: string;
   website?: string;
-  avatar_url?: string;
+  avatar: boolean;
   updated_at: string;
 }
 
@@ -87,4 +87,12 @@ export const getProfilesBySearch = async (supabase: SupabaseClient, search: stri
   if (error) throw error
 
   return data as Profile[]
+}
+
+export const getAvatarUrl = (supabase: SupabaseClient, profile: Profile) => {
+  if (profile.avatar) {
+    return supabase.storage.from('avatars').getPublicUrl(`${profile.username}.png`).data.publicUrl
+  } else {
+    return 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'
+  }
 }

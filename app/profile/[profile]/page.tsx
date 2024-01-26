@@ -28,10 +28,11 @@ export default async function Index({
   return (
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile}>
       
-      <ProfileDisplay profile={viewingProfile} isCurrentProfile={viewingProfile.id == profile?.id} />
+      <ProfileDisplay profile={viewingProfile} supabase={supabase} isCurrentProfile={viewingProfile.id == profile?.id} />
       
       <h1 className="text-xl font-bold mt-8 mb-4">Posts</h1>
       {posts.length != 0 ? <PostList initialPosts={posts}  /> : <div className="text-2xl text-center">No posts yet</div>}
+      
     </StandardResponsivePage>
   )
 }

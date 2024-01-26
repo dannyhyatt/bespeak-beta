@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import Profile, { getMyProfile } from '@/utils/supabase/api/profile'
+import Profile, { getAvatarUrl, getMyProfile } from '@/utils/supabase/api/profile'
 import StandardResponsivePage from '@/components/StandardResponsivePage'
 import { getPostDataForPageById } from '@/utils/supabase/api/post'
 import Link from 'next/link'
@@ -31,10 +31,16 @@ export default async function Index({
       <h1 className={PostTitleCSS}>
         {post?.title}
       </h1>
-      <Link className="text-lg mb-3" href={`/@${post.username}`}>
+      <Link className="text-lg mb-6 mt-2" href={`/@${post.username}`}>
         <span className="align-middle">by </span> 
-        <img className="inline h-8 rounded-sm align-middle" src={post.avatar_url} />
-        <span className="align-middle">{post.avatar_url ? ' ' : ''}{post.author_name}</span>
+        { post.avatar && <img className="inline h-12 mx-2 aspect-square rounded-md align-middle" src={getAvatarUrl(supabase, {
+          ...post,
+          id: post.author_id,
+          full_name: post.author_name,
+          username: post.username,
+          updated_at: ''
+        })} /> }
+        <span className="align-middle">{post.avatar ? ' ' : ''}{post.author_name}</span>
       </Link>
       {post?.content && <div 
         className={`${PostContentCSS} prose-blockquote:before:content-none prose-blockquote:after:content-none`}
