@@ -5,9 +5,12 @@ import React from 'react'
 
 
 import '../src/styles/editor.css'
-import { IconAd, IconAlignCenter, IconAlignJustified, IconAlignLeft, IconAlignRight, IconArrowBackUp, IconArrowForwardUp, IconBlockquote, IconBold, IconCaretDown, IconCaretDownFilled, IconClearFormatting, IconCode, IconFrame, IconH2, IconH3, IconH4, IconH5, IconH6, IconHeading, IconItalic, IconLetterP, IconLink, IconList, IconListNumbers, IconPlus, IconSourceCode, IconSpacingVertical, IconSquarePlus, IconStrikethrough, IconUnderline, IconUnlink } from '@tabler/icons-react'
+import { IconAd, IconAlignCenter, IconAlignJustified, IconAlignLeft, IconAlignRight, IconArrowBackUp, IconArrowForwardUp, IconBlockquote, IconBold, IconCaretDown, IconCaretDownFilled, IconClearFormatting, IconCode, IconFrame, IconH2, IconH3, IconH4, IconH5, IconH6, IconHeading, IconItalic, IconLetterP, IconLink, IconList, IconListNumbers, IconPhoto, IconPlus, IconSourceCode, IconSpacingVertical, IconSquarePlus, IconStrikethrough, IconUnderline, IconUnlink } from '@tabler/icons-react'
+import { createClient } from '@/utils/supabase/client'
+import { SupabaseClient } from '@supabase/supabase-js'
+import { Post } from '@/utils/supabase/api/post'
 
-export const MenuBar = () => {
+export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID: string } ) => {
   const { editor } = useCurrentEditor()
 
   const [activeDropdown, setActiveDropdown] = React.useState<string | null>(null)
@@ -20,8 +23,6 @@ export const MenuBar = () => {
     return null
   }
 
-  console.log('active dropdown', activeDropdown)
-
   return (
     <>
       {/* [&>button] = buttons in toolbar
@@ -30,7 +31,7 @@ export const MenuBar = () => {
           [&>div>div] = dropdown container
           [&>div>div>button] = buttons in dropdowns */}
           
-      <div className={`flex flex-wrap my-4 border-2 rounded-md sticky top-20 bg-background z-10 mx-[-0.5rem]
+      <div className={`flex flex-wrap my-4 border-2 rounded-md sticky top-20 bg-background z-10 mx-[-0.5rem] sm:mx-[-4rem]
                       [&>button]:m-1 [&>button]:p-1 [&>button.is-active]:bg-gray-300 [&>button.is-active]:dark:bg-gray-600 [&>button]:min-w-[2rem] [&>button]:rounded-md
                       [&>button:hover]:bg-gray-200 [&>button:hover]:dark:bg-gray-700 [&>button]:flex [&>*]:justify-center
                       [&>.divider]:h-6 [&>.divider]:border-l-2 [&>.divider]:my-2 [&>.divider]:mx-1
@@ -387,6 +388,55 @@ export const MenuBar = () => {
             </button>
           </div>
         </div>
+
+        <span className="divider"></span>
+
+        
+        <input id="image-upload" type="file" className='hidden' accept=".png,.jpeg,.heic" onChange={async (e) => {
+            const input = e.target;
+            if (input.files && input.files[0]) {
+
+              console.log(`${postID}/${Date.now()}`);
+
+              const { data, error } = await supabase
+                .storage
+                .from('article_images')
+                .upload(`${postID}/${Date.now()}`, input.files[0], {
+                  cacheControl: '3600',
+                  upsert: true,
+                })
+              
+              if(error) {
+                console.error(error)
+                alert('Error uploading image')
+                return
+              }
+
+              const url = supabase.storage.from('article_images').getPublicUrl(data.path).data.publicUrl;
+              
+              editor.chain().focus().setImage({ src: url }).run()
+
+              // var reader = new FileReader();
+          
+              // reader.onload = function (e) {
+              //   if(e.target && e.target.result) {
+              //     editor.chain().focus().setImage({ src: e.target.result as string }).run()
+              //   }
+              // };
+          
+              // reader.readAsDataURL(input.files[0]);
+            }
+        }} />
+        <button
+          onClick={() => {
+          }}
+          title='Insert Image'
+        >
+          <label htmlFor="image-upload" className='contents'>
+            <IconPhoto />
+          </label>
+        </button>
+        
 
         <span className="divider"></span>
 

@@ -16,7 +16,7 @@ export default function UploadAvatar({ profile } : { profile: Profile }) {
     const { data, error } = await createClient()
       .storage
       .from('avatars')
-      .upload(`${profile.username}.png`, avatarFile, {
+      .upload(`${profile.id}`, avatarFile, {
         cacheControl: '300', // 5 minutes
         upsert: true,
       })
@@ -26,13 +26,19 @@ export default function UploadAvatar({ profile } : { profile: Profile }) {
       return
     }
 
+    // this refreshes the cache for other pages
+    await fetch(new URL(createClient()
+      .storage
+      .from('avatars')
+      .getPublicUrl(`${profile.username}.png`).data.publicUrl), {cache: "no-cache"})
+
     forceRebuild(i => i + 1)
   }
 
   return (
     <>
       <label htmlFor="avatar_upload">
-        <img 
+        <img
           src={`${getAvatarUrl(createClient(), profile)}?time=${Date.now()}`}
           className="h-32 aspect-square rounded-lg my-2 hover:opacity-70 cursor-pointer"
         />

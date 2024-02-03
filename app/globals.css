@@ -14,7 +14,7 @@
     :root {
       /* --background: 200 50% 3%; */
       /* --background: 0, 0%, 7.84%; */
-      --background: 0, 0%, 10.84%;
+      --background: 0 0% 10.84%;
       --btn-background: 200 10% 19%;
       --btn-background-hover: 200 10% 23%;
       --foreground: 200 20% 96%;
@@ -49,4 +49,13 @@ body {
   font-weight: 500;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.rounded-underline::after {
+  content: " ";
+  display: block;
+  width: 100%;
+  height: 0.15em;
+  background-color: hsl(var(--foreground));
+  border-radius: 10px;
 }

@@ -62,13 +62,6 @@ const extensions = [
     addNodeView() {
       return ReactNodeViewRenderer(CodeBlockComponent);
     },
-    // addAttributes() {
-    //   return {
-    //     defaultLanguage: {
-    //       parseHTML: element => element.getAttribute('class')?.substring('language-'.length),
-    //     }
-    //   }
-    // },
     renderHTML({ node, HTMLAttributes }) {
       let pre = document.createElement('pre')
       let code = document.createElement('code')
@@ -85,7 +78,7 @@ const extensions = [
     types: ['heading', 'paragraph'],
   }),
   IFramePlugin,
-  Image.configure({})
+  Image
 ]
 
 export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
@@ -178,12 +171,16 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
     },
   }
 
+  if(!post) {
+    return <div>Not found</div>;
+  }
+
   return (
     <>
       <PostTitleField onChange={changeTitle} initialValue={initialTitle} />
       <div className="flex-grow">
       <EditorProvider 
-        injectCSS={true} slotBefore={<MenuBar />} extensions={extensions} content={post?.content} 
+        injectCSS={true} slotBefore={<MenuBar supabase={client} postID={post.id} />} extensions={extensions} content={post?.content} 
         editorProps={editorProps} onUpdate={({editor}) => {
           getHTML = editor.getHTML.bind(editor)
         }} >{' '}</EditorProvider>

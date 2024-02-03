@@ -31,9 +31,9 @@ export default async function Index({
       <h1 className={PostTitleCSS}>
         {post?.title}
       </h1>
-      <Link className="text-lg mb-6 mt-2" href={`/@${post.username}`}>
+      <Link className="sm:text-sm md:text-base lg:text-lg mb-6 mt-2" href={`/@${post.username}`}>
         <span className="align-middle">by </span> 
-        { post.avatar && <img className="inline h-12 mx-2 aspect-square rounded-md align-middle" src={getAvatarUrl(supabase, {
+        { post.avatar && <img className="inline lg:h-12 md:h-10 h-8 mx-1 md:mx-2 aspect-square rounded-md align-middle" src={getAvatarUrl(supabase, {
           ...post,
           id: post.author_id,
           full_name: post.author_name,
@@ -42,9 +42,13 @@ export default async function Index({
         })} /> }
         <span className="align-middle">{post.avatar ? ' ' : ''}{post.author_name}</span>
       </Link>
-      {post?.content && <div 
-        className={`${PostContentCSS} prose-blockquote:before:content-none prose-blockquote:after:content-none`}
-        dangerouslySetInnerHTML={{ __html: post.content }}></div>}
+      
+      {
+        <div 
+          className={`${PostContentCSS}`}
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
+      }
 
       <BottomPostBar post={post} />
 

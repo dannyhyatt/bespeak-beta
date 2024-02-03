@@ -91,7 +91,7 @@ export const getProfilesBySearch = async (supabase: SupabaseClient, search: stri
 
 export const getAvatarUrl = (supabase: SupabaseClient, profile: Profile) => {
   if (profile.avatar) {
-    return supabase.storage.from('avatars').getPublicUrl(`${profile.username}.png`).data.publicUrl
+    return supabase.storage.from('avatars').getPublicUrl(`${profile.id}`).data.publicUrl
   } else {
     return 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'
   }

@@ -23,7 +23,8 @@ const sanitizeConfig = {
     '*': ['style'],
     'a' : ['href', 'target', 'rel'],
     'pre' : ['spellcheck', 'data-highlight-language'],
-    'code' : ['as']
+    'code' : ['as'],
+    'img' : ['src', 'alt', 'title'],
   },
   allowedStyles: {
     '*': {

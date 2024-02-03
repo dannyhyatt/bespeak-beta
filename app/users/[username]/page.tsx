@@ -9,6 +9,8 @@ import { SupabaseClient } from '@supabase/supabase-js'
 import { Revision, Post, getPostsByAuthorId, getPostsByAuthorUsername } from '@/utils/supabase/api/post'
 import Link from 'next/link'
 import ProfileDisplay from '@/components/ProfileDisplay'
+import ProfilePage from '@/components/ProfilePage'
+import { getReadlists } from '@/utils/supabase/api/readlists'
 
 export default async function Index({
   params
@@ -29,15 +31,12 @@ export default async function Index({
   
   const posts = await getPostsByAuthorUsername(supabase, params.username)
 
-  console.log('received posts', posts)
+  const readlists = await getReadlists(supabase, viewingProfile.id)
 
   return (
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile}>
       
-      <ProfileDisplay profile={viewingProfile} supabase={supabase} isCurrentProfile={viewingProfile.id == profile?.id} />
-      
-      <h1 className="text-xl font-bold mt-8 mb-4">Posts</h1>
-      {posts.length != 0 ? <PostList initialPosts={posts}  /> : <div className="text-2xl text-center">No posts yet</div>}
+      <ProfilePage profile={profile} posts={posts} readlists={readlists} viewingProfile={viewingProfile} />
 
     </StandardResponsivePage>
   )
