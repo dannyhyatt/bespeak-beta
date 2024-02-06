@@ -11,14 +11,19 @@ import { IconCirclePlus } from "@tabler/icons-react"
 import NewListModal from "./NewListModal"
 import Readlist from "@/utils/supabase/api/readlists"
 import { read } from "fs"
+import Link from "next/link"
 
-export default function ProfilePage({ viewingProfile, posts, readlists, profile } : { viewingProfile: Profile, posts: PostWithRevision[], readlists: Readlist[], profile: Profile | undefined }) {
+export default function ProfilePage({ viewingProfile, posts, initialReadlists, profile } : { viewingProfile: Profile, posts: PostWithRevision[], initialReadlists: Readlist[], profile: Profile | undefined }) {
 
   const [showing, setShowing] = useState<'posts' | 'lists'>('posts')
 
   const [newListModalOpen, setNewListModalOpen] = useState(false)
 
+  const [readlists, setReadlists] = useState<Readlist[]>(initialReadlists)
+
   const isCurrentProfile = profile?.id == viewingProfile.id
+
+  console.log('got lists', readlists)
   
   return (
     <>
@@ -41,19 +46,21 @@ export default function ProfilePage({ viewingProfile, posts, readlists, profile 
       }
       { showing == 'lists' && 
         <>
-          <div 
-            onClick={() => setNewListModalOpen(true)}
-            className="text-2xl p-4 flex items-center gap-2 border-2 rounded-md cursor-pointer sm:mx-[-1rem]">
-            <IconCirclePlus size={28} /> New List
-          </div>
+          { isCurrentProfile && 
+            <div 
+              onClick={() => setNewListModalOpen(true)}
+              className="text-lg px-4 py-2 flex items-center gap-2 border-2 rounded-md cursor-pointer sm:mx-[-1rem]">
+              <IconCirclePlus /> New List
+            </div>
+          }
 
           {
             readlists.length != 0 ?
 
             readlists.map((list) => (
-              <div className="p-4 border-2 rounded-md mt-4 text-lg sm:mx-[-1rem]" key={list.id}>
-                {list.name} <span className="text-sm">({list.num_items} items)</span>
-              </div>
+              <Link href={`/list/${list.id}`} className="p-4 border-2 rounded-md mt-4 text-lg sm:mx-[-1rem]" key={list.id}>
+                {list.name} <span className="text-sm">({list.num_items} item{list.num_items != 1 && 's'})</span>
+              </Link>
             )) : 
 
             <div className="text-2xl text-center mt-4 sm:mx-[-1rem]">
@@ -65,9 +72,9 @@ export default function ProfilePage({ viewingProfile, posts, readlists, profile 
 
       { newListModalOpen && 
         <NewListModal
-          onListCreated={(name) => {
+          onListCreated={(newReadlist) => {
             setNewListModalOpen(false)
-            // todo add to the list
+            setReadlists([newReadlist, ...readlists])
           }} 
           onCancel={() => setNewListModalOpen(false)}
         />

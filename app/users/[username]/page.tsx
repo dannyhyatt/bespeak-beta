@@ -36,7 +36,7 @@ export default async function Index({
   return (
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile}>
       
-      <ProfilePage profile={profile} posts={posts} readlists={readlists} viewingProfile={viewingProfile} />
+      <ProfilePage profile={profile} posts={posts} initialReadlists={readlists} viewingProfile={viewingProfile} />
 
     </StandardResponsivePage>
   )

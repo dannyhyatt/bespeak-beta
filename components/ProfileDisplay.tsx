@@ -10,7 +10,7 @@ export default function ProfileDisplay({ profile, supabase, isCurrentProfile } :
 
   return (
     <>
-      <h1 className="text-xl font-bold">Profile {isCurrentProfile && <Link href={`/profile/edit`} className={LinkCSS}>(Edit)</Link>}</h1>
+      <h1 className="text-xl font-bold border-b-2">Profile {isCurrentProfile && <Link href={`/profile/edit`} className={LinkCSS}>(Edit)</Link>}</h1>
       <div className="flex my-4 rounded-md sm:mx-[-1rem]">
         <img className="h-32 aspect-square rounded-lg mr-4 bg-slate-500" src={getAvatarUrl(supabase, profile)} />
         <span className="flex flex-col py-1 w-[calc(100%-10rem)]">

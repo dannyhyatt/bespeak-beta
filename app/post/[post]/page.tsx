@@ -50,7 +50,7 @@ export default async function Index({
         />
       }
 
-      <BottomPostBar post={post} />
+      <BottomPostBar post={post} userID={profile?.id} />
 
     </StandardResponsivePage>
   )
