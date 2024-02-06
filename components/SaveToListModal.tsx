@@ -1,4 +1,4 @@
-import Readlist, { ReadlistWithCheck, addToReadlist, getReadlists, getReadlistsWithChecks } from "@/utils/supabase/api/readlists";
+import Readlist, { ReadlistWithCheck, addToReadlist, getReadlists, getReadlistsWithChecks, removeFromReadlist } from "@/utils/supabase/api/readlists";
 import { createClient } from "@/utils/supabase/client";
 import { IconCheckbox, IconCirclePlus, IconSquare, IconSquareCheck } from "@tabler/icons-react";
 import Link from "next/link";
@@ -79,6 +79,8 @@ function SaveListItem({ readlist, postID } : { readlist: ReadlistWithCheck, post
   const saveItem = async () => {
     if(checked) {
       // remove from list
+      await removeFromReadlist(createClient(), readlist.id, postID)
+      setChecked(false)
     } else {
       // add to list
       await addToReadlist(createClient(), readlist.id, postID)

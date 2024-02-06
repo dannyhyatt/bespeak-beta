@@ -22,6 +22,8 @@ export default async function Index({
   
   const post = await getPostDataForPageById(supabase, params.post)
 
+  console.log('got post', post)
+
   return (
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile} className='lg:w-7/12'>
 
@@ -29,7 +31,7 @@ export default async function Index({
         <span className='mb-8 italic'>This is your post. Click <Link href={`/write/${post.id}`} className={LinkCSS}>here</Link> to edit it.</span>}
 
       <h1 className={PostTitleCSS}>
-        {post?.title}
+        {post.title}
       </h1>
       <Link className="sm:text-sm md:text-base lg:text-lg mb-6 mt-2" href={`/@${post.username}`}>
         <span className="align-middle">by </span> 

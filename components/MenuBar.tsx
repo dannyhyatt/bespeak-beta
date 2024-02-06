@@ -10,7 +10,7 @@ import { createClient } from '@/utils/supabase/client'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Post } from '@/utils/supabase/api/post'
 
-export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID: string } ) => {
+export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID: string | undefined } ) => {
   const { editor } = useCurrentEditor()
 
   const [activeDropdown, setActiveDropdown] = React.useState<string | null>(null)
@@ -432,7 +432,13 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
           }}
           title='Insert Image'
         >
-          <label htmlFor="image-upload" className='contents'>
+          <label htmlFor="image-upload" className='contents' onClick={(e) => {
+            if(!postID) {
+              alert('Save your artticle before uploading images')
+              e.preventDefault()
+              e.stopPropagation()
+            }
+          }}>
             <IconPhoto />
           </label>
         </button>
@@ -441,7 +447,7 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
         <span className="divider"></span>
 
         <button
-          onClick={() => editor.chain().focus().setIframe({ src: window.prompt('What Url?') ?? 'youtube.com' }).run()}
+          onClick={() => editor.chain().focus().setIframe({ src: window.prompt('What URL?') ?? 'youtube.com' }).run()}
           title='Insert Frame'
         >
           <IconSquarePlus />

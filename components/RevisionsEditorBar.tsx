@@ -8,7 +8,11 @@ export default function RevisionsEditorBar({ revisions, currentRevisionId, curre
     <div className="flex flex-row items-center justify-between overflow-x-scroll mb-8">
       {revisions.map(revision => {
         return (
-          <Link href={`/write/${currentPostId}/${revision.id}`} className={`flex flex-col items-center justify-center px-4 py-2 rounded-md cursor-pointer ${revision.id === currentRevisionId ? 'bg-gray-200 dark:bg-gray-700' : ''}`}>
+          <Link 
+            href={`/write/${currentPostId}/${revision.id}`} 
+            className={`flex flex-col items-center justify-center px-4 py-2 rounded-md cursor-pointer ${revision.id === currentRevisionId ? 'bg-gray-200 dark:bg-gray-700' : ''}`}
+            key={revision.id}
+          >
             <div className="text-sm">{revision.title}</div>
             <div className="text-xs text-gray-500 whitespace-nowrap">{format(parseISO(revision.created_at), "LLLL d, yyyy 'at' h:mm a")}</div>
           </Link>

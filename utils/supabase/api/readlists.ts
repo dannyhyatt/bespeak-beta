@@ -97,3 +97,19 @@ export const addToReadlist = async (supabase: SupabaseClient, readlistID: string
   return data
 
 }
+
+export const removeFromReadlist = async (supabase: SupabaseClient, readlistID: string, postID: string) => {
+    
+    console.log('removing from readlist', readlistID, postID)
+  
+    const { data, error } = await supabase
+      .from('readlist_items')
+      .delete()
+      .eq('readlist_id', readlistID)
+      .eq('post_id', postID)
+      .select()
+  
+    if (error) throw error
+    return data
+  
+  }

@@ -103,6 +103,7 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
 
   const saveHandler = async ({ publish } : { publish?: boolean }) => {
     
+    console.log('get html defined?')
     if(getHTML == undefined) return
     console.log('get html not undefined')
     const currentHtml = getHTML()
@@ -171,16 +172,12 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
     },
   }
 
-  if(!post) {
-    return <div>Not found</div>;
-  }
-
   return (
     <>
       <PostTitleField onChange={changeTitle} initialValue={initialTitle} />
       <div className="flex-grow">
       <EditorProvider 
-        injectCSS={true} slotBefore={<MenuBar supabase={client} postID={post.id} />} extensions={extensions} content={post?.content} 
+        injectCSS={true} slotBefore={<MenuBar supabase={client} postID={post?.id} />} extensions={extensions} content={post?.content} 
         editorProps={editorProps} onUpdate={({editor}) => {
           getHTML = editor.getHTML.bind(editor)
         }} >{' '}</EditorProvider>
