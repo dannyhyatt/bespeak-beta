@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ReactTextareaAutosize from "react-textarea-autosize";
 import { ActionButtonCSS } from "./CSSConsts";
 import CommentDisplay from "./CommentDisplay";
+import CommentTextbox from "./CommentTextbox";
 
 
 export default function CommentList({ replyToId, postId } : { replyToId?: string | null, postId: string }) {
@@ -11,13 +12,13 @@ export default function CommentList({ replyToId, postId } : { replyToId?: string
   const [comments, setComments] = useState<CommentWithProfile[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
-  const [commentText, setCommentText] = useState<string>('')
-
   const client = createClient()
 
   const init = async () => {
 
     const comments = await getComments(client, postId, replyToId ?? null)
+
+    console.log('getting comments:', comments)
 
     setComments(comments)
     setLoading(false)
@@ -45,35 +46,15 @@ export default function CommentList({ replyToId, postId } : { replyToId?: string
         }
       </span>
       
-      <div className="flex shrink justify-center gap-2 mb-4 mx-2 items-end">
-
-        <ReactTextareaAutosize 
-          className="flex-grow p-2 rounded-md border-2 bg-background" placeholder="Write a comment..." maxRows={5}
-          onChange={(e) => { setCommentText(e.target.value) }} value={commentText}
-          onKeyDown={(e) => {
-            if(e.key == 'Enter' && e.metaKey) {
-              createComment(client, postId, replyToId ?? null, commentText).then(() => {
-                setCommentText('')
-                init()
-              })
-            }
+      { !replyToId &&
+        <CommentTextbox
+          className="mb-4"
+          onComment={async (commentText) => {
+            await createComment(client, postId, replyToId ?? null, commentText);
+            init();
           }}
         />
-
-        <button 
-          // transparent border t make it the same size as the textarea
-          className={`${ActionButtonCSS} border-2 border-transparent`}
-          onClick={() => {
-            createComment(client, postId, replyToId ?? null, commentText).then(() => {
-              setCommentText('')
-              init()
-            })
-          }}
-        >
-          Comment
-        </button>
-
-      </div>
+      }
 
     </div>
   );
