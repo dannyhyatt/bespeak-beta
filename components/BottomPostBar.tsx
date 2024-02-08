@@ -76,10 +76,10 @@ export default function BottomPostBar({ post, userID } : { post: PostWithRevisio
                 className="p-2 m-1 hover:bg-gray-200 hover:dark:bg-gray-700 rounded-md cursor-pointer"
                 onClick={() => setShowComments(!showComments)}
               >
-                Comments <ChevronDownIcon className="inline" />
+                Comments ({post.num_comments}) <ChevronDownIcon className="inline" />
               </span>
-              <span className="p-2 m-1 hover:bg-gray-200 hover:dark:bg-gray-700 rounded-md cursor-pointer"><ThumbsUpIcon /></span>
-              <span className="p-2 m-1 hover:bg-gray-200 hover:dark:bg-gray-700 rounded-md cursor-pointer"><ThumbsDownIcon /></span>
+              <span className="p-2 m-1 hover:bg-gray-200 hover:dark:bg-gray-700 rounded-md cursor-pointer flex gap-2 mr-0"><ThumbsUpIcon />{post.likes}</span>
+              <span className="p-2 m-1 hover:bg-gray-200 hover:dark:bg-gray-700 rounded-md cursor-pointer flex gap-2 ml-0">{post.dislikes}<ThumbsDownIcon /></span>
             </span>
           </span>
 

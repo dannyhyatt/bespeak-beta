@@ -41,6 +41,14 @@ export default async function Index({
     router.refresh()
   }
 
+  const setNoCurrentRevision = async () => {
+    await supabase.from('posts').update({
+      'revision_id' : null
+    }).eq('id', postId)
+    router.push(`/write/${postId}`)
+    router.refresh()
+  }
+
   return (
     <StandardResponsivePage isSupabaseConnected={profile != null} profile={profile} className='resize-x max-w-[min(100%,56rem)] lg:w-7/12 items-stretch overflow-visible h-auto'>
       <Suspense fallback={<div>Loading...</div>}>
@@ -48,7 +56,10 @@ export default async function Index({
         <RevisionsEditorBar revisions={allRevisions} currentRevisionId={revision.id} currentPostId={params.write} />
 
         <span className='italic'>Viewing revision from {format(parseISO(revision.created_at), "LLLL d, yyyy 'at' h:mm a")}.</span>
-        <span className='mb-8'>Click <span className={LinkCSS} onClick={setAsCurrentRevision}>here</span> to set this as the public-facing revision for this article.</span>
+        <span className='mb-8'>
+          Click <span className={LinkCSS} onClick={setAsCurrentRevision}>here</span> to set this as the public-facing revision for this article. 
+          Click <span className={LinkCSS} onClick={setNoCurrentRevision}>here</span> to remove the public-facing revision for this article.
+        </span>
 
         <h1 className={`bg-transparent cursor-text outline-none overflow-visible text-2xl mb-1 font-semibold resize-none dark:text-white`}>
           {revision.title}

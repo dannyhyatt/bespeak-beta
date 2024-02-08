@@ -18,8 +18,6 @@ export default function CommentList({ replyToId, postId } : { replyToId?: string
 
     const comments = await getComments(client, postId, replyToId ?? null)
 
-    console.log('getting comments:', comments)
-
     setComments(comments)
     setLoading(false)
 

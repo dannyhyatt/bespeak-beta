@@ -24,6 +24,9 @@ export interface PostWithRevision {
   revision_id: string
   tags?: string[]
   created_at: string
+  likes: number
+  dislikes: number
+  num_comments: number
   title: string
   content: string
   cover_image?: string

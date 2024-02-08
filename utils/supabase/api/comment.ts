@@ -5,7 +5,7 @@ export interface Comment {
   id: string
   author_id: string
   post_id: string
-  reply_to_id: string
+  reply_to?: string
   num_replies: number
   content: string
   created_at: string
@@ -60,8 +60,6 @@ export const getComments = async ( client: SupabaseClient, post_id: string, repl
   query = query.order('created_at', { ascending: true })
 
   const { data, error } = await query
-
-  console.log('received data:', data)
 
   if(error) {
     throw error

@@ -429,10 +429,11 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
         }} />
         <button
           onClick={() => {
+            document.getElementById('image-upload')?.click()
           }}
           title='Insert Image'
         >
-          <label htmlFor="image-upload" className='contents' onClick={(e) => {
+          <label htmlFor="image-upload" id="image-upload-label" className='contents cursor-pointer' onClick={(e) => {
             if(!postID) {
               alert('Save your artticle before uploading images')
               e.preventDefault()
