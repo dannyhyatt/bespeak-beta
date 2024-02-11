@@ -1,5 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { PostWithRevision } from "./post";
+import Profile from "./profile";
 
 export default interface Readlist {
   id: string;
@@ -11,6 +12,9 @@ export default interface Readlist {
 
 export interface ReadlistWithCheck extends Readlist {
   already_in_list: boolean;
+}
+
+export interface ReadlistWithProfile extends Readlist, Profile {
 }
 
 export const createReadlist = async (supabase: SupabaseClient, name: string) => {
@@ -49,16 +53,29 @@ export const getReadlists = async (supabase: SupabaseClient, userID: string) => 
 
 export const getReadlistById = async (supabase: SupabaseClient, readlistID: string) => {
   
-    const { data, error } = await supabase
-      .from('readlists')
-      .select('*')
-      .eq('id', readlistID)
-      .single()
-    
-    if (error) throw error
-    return data as Readlist
+  const { data, error } = await supabase
+    .from('readlists')
+    .select('*')
+    .eq('id', readlistID)
+    .single()
   
-  }
+  if (error) throw error
+  return data as Readlist
+
+}
+
+export const getReadlistByIdWithProfile = async (supabase: SupabaseClient, readlistID: string) => {
+    
+  const { data, error } = await supabase
+    .from('readlists_with_profile')
+    .select('*')
+    .eq('id', readlistID)
+    .single()
+  
+  if (error) throw error
+  return data as ReadlistWithProfile
+
+}
 
 export const getPostsByReadlist = async (supabase: SupabaseClient, readlistID: string) => {
     

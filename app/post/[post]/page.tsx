@@ -9,6 +9,7 @@ import BottomPostBar from '@/components/BottomPostBar'
 import { LinkCSS, PostContentCSS, PostTitleCSS } from '@/components/CSSConsts'
 
 import '../../../src/styles/editor.css'
+import { format, parseISO } from 'date-fns'
 
 export default async function Index({
   params
@@ -33,17 +34,20 @@ export default async function Index({
       <h1 className={PostTitleCSS}>
         {post.title}
       </h1>
-      <Link className="sm:text-sm md:text-base lg:text-lg mb-6 mt-2" href={`/@${post.username}`}>
+      <span className="sm:text-sm md:text-base lg:text-lg mt-2 mb-6">
         <span className="align-middle">by </span> 
-        { post.avatar && <img className="inline lg:h-12 md:h-10 h-8 mx-1 md:mx-2 aspect-square rounded-md align-middle" src={getAvatarUrl(supabase, {
-          ...post,
-          id: post.author_id,
-          full_name: post.author_name,
-          username: post.username,
-          updated_at: ''
-        })} /> }
-        <span className="align-middle">{post.avatar ? ' ' : ''}{post.author_name}</span>
-      </Link>
+        <Link href={`/@${post.username}`}>
+          { post.avatar && <img className="inline lg:h-12 md:h-10 h-8 mx-1 md:mx-2 aspect-square rounded-md align-middle" src={getAvatarUrl(supabase, {
+            ...post,
+            id: post.author_id,
+            full_name: post.author_name,
+            username: post.username,
+            updated_at: ''
+          })} /> }
+          <span className="align-middle">{post.avatar ? ' ' : ''}{post.author_name}</span>
+        </Link>
+        <span className="align-middle"> on {format(parseISO(post.created_at), 'MMMM d, yyyy')}</span>
+      </span>
       
       {
         <div 
