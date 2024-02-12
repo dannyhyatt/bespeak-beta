@@ -1,14 +1,15 @@
 'use client'
 
-import { PostWithRevision } from "@/utils/supabase/api/post";
+import { PostWithRevision, dislikePost, getReaction, likePost, removePostReaction, updatePostReaction } from "@/utils/supabase/api/post";
 import { BookmarkIcon, ChevronDownIcon, CommentIcon, ShareIcon, ThumbsDownIcon, ThumbsUpIcon } from "./Icons";
 import { IconCopy, IconCopyCheck, IconDotsVertical, IconLayoutNavbarExpand } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import CommentList from "./CommentsList";
 import SaveToListModal from "./SaveToListModal";
+import { createClient } from "@/utils/supabase/client";
 
 
-export default function BottomPostBar({ post, userID } : { post: PostWithRevision, userID: string | undefined }) {
+export default function BottomPostBar({ post, userID, initialReaction } : { post: PostWithRevision, userID: string | undefined, initialReaction?: 'like' | 'dislike'}) {
 
   const [expanded, setExpanded] = useState<boolean>(false)
   const [canShare, setCanShare] = useState<boolean>(false)
@@ -18,10 +19,12 @@ export default function BottomPostBar({ post, userID } : { post: PostWithRevisio
 
   const [showComments, setShowComments] = useState<boolean>(false)
 
+  const [reaction, setReaction] = useState<'like' | 'dislike' | undefined>(initialReaction)
+
   const shareArticle = () => {
     if (navigator.share) {
       navigator.share({
-        text: `Check out this article on Bespeak!`,
+        text: `Check out this artic'like'le on Bespeak!`,
         url: `${window.location.href}`
       })
     } else {
@@ -30,6 +33,42 @@ export default function BottomPostBar({ post, userID } : { post: PostWithRevisio
       setTimeout(() => setShowCopied(false), 2000)
     }
     // todo copy link to clipboard if no share
+  }
+
+  const likeBtnPress = async () => {
+    if(!userID) return // todo show a sign-in message
+    if(reaction == undefined) {
+      await likePost(createClient(), post.id)
+      post.likes++
+      setReaction('like')
+    } else if(reaction == 'dislike') {
+      await updatePostReaction(createClient(), post.id, true)
+      post.likes++
+      post.dislikes--
+      setReaction('like')
+    } else {
+      await removePostReaction(createClient(), post.id)
+      post.likes--
+      setReaction(undefined)
+    }
+  }
+
+  const dislikeBtnPress = async () => {
+    if(!userID) return // todo show a sign-in message
+    if(reaction == undefined) {
+      await dislikePost(createClient(), post.id)
+      post.dislikes++
+      setReaction('dislike')
+    } else if(reaction == 'like') {
+      await updatePostReaction(createClient(), post.id, false)
+      post.likes--
+      post.dislikes++
+      setReaction('dislike')
+    } else {
+      await removePostReaction(createClient(), post.id)
+      post.dislikes--
+      setReaction(undefined)
+    }
   }
 
   useEffect(() => {
@@ -78,8 +117,21 @@ export default function BottomPostBar({ post, userID } : { post: PostWithRevisio
               >
                 Comments ({post.num_comments}) <ChevronDownIcon className="inline" />
               </span>
-              <span className="p-2 m-1 hover:bg-gray-200 hover:dark:bg-gray-700 rounded-md cursor-pointer flex gap-2 mr-0"><ThumbsUpIcon />{post.likes}</span>
-              <span className="p-2 m-1 hover:bg-gray-200 hover:dark:bg-gray-700 rounded-md cursor-pointer flex gap-2 ml-0">{post.dislikes}<ThumbsDownIcon /></span>
+
+              {/* the like buttons */}
+              <span
+                onClick={likeBtnPress}
+                className={`${reaction == 'like' && 'bg-gray-200'} p-2 m-1 hover:bg-gray-300 hover:dark:bg-gray-700 rounded-md cursor-pointer flex gap-2 mr-0`}
+              >
+                <ThumbsUpIcon />{post.likes}
+              </span>
+              <span
+                onClick={dislikeBtnPress}
+                className={`${reaction == 'dislike' && 'bg-gray-200'} p-2 m-1 hover:bg-gray-300 hover:dark:bg-gray-700 rounded-md cursor-pointer flex gap-2 mr-0`}
+              >
+                {post.dislikes}<ThumbsDownIcon />
+              </span>
+
             </span>
           </span>
 

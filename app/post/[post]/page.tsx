@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Profile, { getAvatarUrl, getMyProfile } from '@/utils/supabase/api/profile'
 import StandardResponsivePage from '@/components/StandardResponsivePage'
-import { getPostDataForPageById } from '@/utils/supabase/api/post'
+import { getPostDataForPageById, getReaction } from '@/utils/supabase/api/post'
 import Link from 'next/link'
 import BottomPostBar from '@/components/BottomPostBar'
 import { LinkCSS, PostContentCSS, PostTitleCSS } from '@/components/CSSConsts'
@@ -22,6 +22,17 @@ export default async function Index({
   const isSupabaseConnected = profile != null
   
   const post = await getPostDataForPageById(supabase, params.post)
+
+  let reaction: 'like' | 'dislike' | undefined = undefined
+
+  try {
+    const res = await getReaction(supabase, post.id)
+    if(res) reaction = res.is_like ? 'like' : 'dislike'
+  } catch(e) {
+    // likely user not signed in
+  }
+
+  console.log('got reaction', reaction)
 
   console.log('got post', post)
 
@@ -56,7 +67,7 @@ export default async function Index({
         />
       }
 
-      <BottomPostBar post={post} userID={profile?.id} />
+      <BottomPostBar post={post} userID={profile?.id} initialReaction={reaction} />
 
     </StandardResponsivePage>
   )

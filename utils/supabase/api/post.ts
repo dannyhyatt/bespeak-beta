@@ -185,3 +185,67 @@ export const getRevisionsByPostId = async (supabase: SupabaseClient, postId: str
 
   return data as RevisionCardInfo[]
 }
+
+export const getReaction = async (supabase: SupabaseClient, postId: string) => {
+  const { data, error } = await supabase
+    .from('reactions')
+    .select('*')
+    .eq('post_id', postId)
+    .eq('user_id', (await supabase.auth.getUser()).data.user?.id)
+
+  if (error) throw error
+
+  return data[0]
+}
+
+export const likePost = async (supabase: SupabaseClient, postId: string) => {
+
+  const { data, error } = await supabase
+    .from('reactions')
+    .insert({ post_id: postId, is_like: true })
+
+  if (error) throw error
+
+  return data
+
+}
+
+export const dislikePost = async (supabase: SupabaseClient, postId: string) => {
+
+  const { data, error } = await supabase
+    .from('reactions')
+    .insert({ post_id: postId, is_like: false })
+
+  if (error) throw error
+
+  return data
+
+}
+
+export const updatePostReaction = async (supabase: SupabaseClient, postId: string, isLike: boolean) => {
+
+  console.log('updating reaction', postId, isLike)
+  
+  const { data, error } = await supabase
+    .from('reactions')
+    .update({ is_like: isLike })
+    .eq('post_id', postId)
+
+  if (error) throw error
+
+  return data
+
+}
+
+export const removePostReaction = async (supabase: SupabaseClient, postId: string) => {
+  
+  const { data, error } = await supabase
+    .from('reactions')
+    .delete()
+    .eq('post_id', postId)
+
+  if (error) throw error
+
+  return data
+
+}
