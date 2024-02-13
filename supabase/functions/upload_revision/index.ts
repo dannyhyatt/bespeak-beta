@@ -3,6 +3,7 @@
 // This enables autocomplete, go to definition, etc.
 
 import sanitizeHtml from "https://esm.sh/sanitize-html@2.11.0";
+import { convert } from "https://esm.sh/html-to-text@9.0.5";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.2"
 
 console.log("Hello from Functions!")
@@ -68,10 +69,12 @@ Deno.serve(async (req) => {
     const safeContent = sanitizeHtml(content, sanitizeConfig)
 
     console.log('sanitized content: ', safeContent)
+
+    const textContent = convert(content, {selectors: [ { selector: 'a', options: { ignoreHref: true } } ]})
     
     // todo add db constraint that the user must be the author of the post
     const { data, error } = await adminSupabase.from('post_revisions').insert(
-      { title, content: safeContent, post_id: postId },
+      { title, content: safeContent, text_only_content: textContent, post_id: postId },
     ).select('*')
 
     if(error) {
