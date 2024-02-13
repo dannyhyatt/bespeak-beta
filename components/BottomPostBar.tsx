@@ -121,13 +121,13 @@ export default function BottomPostBar({ post, userID, initialReaction } : { post
               {/* the like buttons */}
               <span
                 onClick={likeBtnPress}
-                className={`${reaction == 'like' && 'bg-gray-200'} p-2 m-1 hover:bg-gray-300 hover:dark:bg-gray-700 rounded-md cursor-pointer flex gap-2 mr-0`}
+                className={`${reaction == 'like' && 'bg-gray-200 dark:bg-gray-600'} p-2 m-1 hover:bg-gray-300 hover:dark:bg-gray-700 rounded-md cursor-pointer flex gap-2 mr-0`}
               >
                 <ThumbsUpIcon />{post.likes}
               </span>
               <span
                 onClick={dislikeBtnPress}
-                className={`${reaction == 'dislike' && 'bg-gray-200'} p-2 m-1 hover:bg-gray-300 hover:dark:bg-gray-700 rounded-md cursor-pointer flex gap-2 mr-0`}
+                className={`${reaction == 'dislike' && 'bg-gray-200 dark:bg-gray-600'} p-2 m-1 hover:bg-gray-300 hover:dark:bg-gray-700 rounded-md cursor-pointer flex gap-2 mr-0`}
               >
                 {post.dislikes}<ThumbsDownIcon />
               </span>

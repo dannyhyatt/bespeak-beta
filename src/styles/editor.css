@@ -50,7 +50,7 @@
 }
 
 .tiptap > * + * {
-  margin-top: 0.75em;
+  /* margin-top: 0.75em; */
 }
 .tiptap pre {
   background: #fefefe;
