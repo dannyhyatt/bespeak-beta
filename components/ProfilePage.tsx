@@ -42,7 +42,16 @@ export default function ProfilePage({ viewingProfile, posts, initialReadlists, p
         </h1>
       </div>
       { showing == 'posts' && 
-        (posts.length != 0 ? <PostList initialPosts={posts}  /> : <div className="text-2xl text-center">No posts yet</div>)
+        <>
+          { isCurrentProfile && 
+            <Link 
+              href={'/write'}
+              className="text-lg px-4 py-2 mb-4 flex items-center gap-2 border-2 rounded-md cursor-pointer sm:mx-[-1rem]">
+              <IconCirclePlus /> New Post
+            </Link>
+          }
+          {(posts.length != 0 ? <PostList initialPosts={posts}  /> : <div className="text-2xl text-center">No posts yet</div>)}
+        </>
       }
       { showing == 'lists' && 
         <>
