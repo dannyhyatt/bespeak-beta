@@ -5,7 +5,7 @@ import React from 'react'
 
 
 import '../src/styles/editor.css'
-import { IconAd, IconAlignCenter, IconAlignJustified, IconAlignLeft, IconAlignRight, IconArrowBackUp, IconArrowForwardUp, IconBlockquote, IconBold, IconCaretDown, IconCaretDownFilled, IconClearFormatting, IconCode, IconFrame, IconH2, IconH3, IconH4, IconH5, IconH6, IconHeading, IconItalic, IconLetterP, IconLink, IconList, IconListNumbers, IconPhoto, IconPlus, IconSourceCode, IconSpacingVertical, IconSquarePlus, IconStrikethrough, IconUnderline, IconUnlink } from '@tabler/icons-react'
+import { IconAd, IconAlignCenter, IconAlignJustified, IconAlignLeft, IconAlignRight, IconArrowBackUp, IconArrowForwardUp, IconBlockquote, IconBold, IconCaretDown, IconCaretDownFilled, IconClearFormatting, IconCode, IconFrame, IconH2, IconH3, IconH4, IconH5, IconH6, IconHeading, IconItalic, IconLetterP, IconLink, IconList, IconListNumbers, IconPhoto, IconPlus, IconSourceCode, IconSpacingVertical, IconSquarePlus, IconStrikethrough, IconTextCaption, IconUnderline, IconUnlink } from '@tabler/icons-react'
 import { createClient } from '@/utils/supabase/client'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Post } from '@/utils/supabase/api/post'
@@ -34,6 +34,7 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
       <div className={`flex flex-wrap my-4 border-2 rounded-md sticky top-20 bg-background z-10 mx-[-0.5rem] sm:mx-[-4rem]
                       [&>button]:m-1 [&>button]:p-1 [&>button.is-active]:bg-gray-300 [&>button.is-active]:dark:bg-gray-600 [&>button]:min-w-[2rem] [&>button]:rounded-md
                       [&>button:hover]:bg-gray-200 [&>button:hover]:dark:bg-gray-700 [&>button]:flex [&>*]:justify-center
+                      [&>button]:disabled:opacity-70
                       [&>.divider]:h-6 [&>.divider]:border-l-2 [&>.divider]:my-2 [&>.divider]:mx-1
                       [&>.divider]:border-gray-300 [&>.divider]:dark:border-gray-700
                       [&>div>button]:m-1 [&>div>button]:p-1 [&>div>button]:rounded-md
@@ -428,12 +429,13 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
             }
         }} />
         <button
-          onClick={() => {
-            document.getElementById('image-upload')?.click()
+          onClick={(e) => {
+            // console.log(e.target)
+            // document.getElementById('image-upload')?.click()
           }}
           title='Insert Image'
         >
-          <label htmlFor="image-upload" id="image-upload-label" className='contents cursor-pointer' onClick={(e) => {
+          <label htmlFor="image-upload" id="image-upload-label" className='contents cursor-pointer h-0 w-0 overflow-visible' onClick={(e) => {
             if(!postID) {
               alert('Save your artticle before uploading images')
               e.preventDefault()
@@ -443,8 +445,19 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
             <IconPhoto />
           </label>
         </button>
-        
 
+        <button
+          onClick={() => {
+            if(editor.can().imageToFigure())
+              editor.chain().focus().imageToFigure().run()
+            else
+              editor.chain().focus().figureToImage().run()
+          }}
+          title='Add Caption'
+        >
+          <IconTextCaption />
+        </button>
+        
         <span className="divider"></span>
 
         <button

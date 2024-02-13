@@ -29,6 +29,7 @@ import lowlight from './plugins/Lowlight'
 import { toHtml } from 'hast-util-to-html'
 import CollaboratorsModal from './CollaboratorsModal'
 import Image from '@tiptap/extension-image'
+import { Figure } from './plugins/Figure'
 
 
 const extensions = [
@@ -78,7 +79,8 @@ const extensions = [
     types: ['heading', 'paragraph'],
   }),
   IFramePlugin,
-  Image
+  Image,
+  Figure
 ]
 
 export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
