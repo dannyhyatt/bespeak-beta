@@ -273,3 +273,16 @@ export const setTags = async (supabase: SupabaseClient, postId: string, tags: st
 
   return data
 }
+
+export const getPostsByTag = async (supabase: SupabaseClient, tags: string) => {
+  const { data, error } = await supabase
+    .from('posts_with_revision')
+    .select('*')
+    .overlaps('tags', [tags])
+    .order('likes', { ascending: false })
+    .limit(10)
+
+  if (error) throw error
+  
+  return data as PostWithRevision[]
+}
