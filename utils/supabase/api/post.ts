@@ -34,6 +34,7 @@ export interface PostWithRevision {
   author_name: string
   avatar: boolean
   username: string
+  text_only_content: string
 }
 
 export interface RevisionCardInfo {
@@ -248,4 +249,16 @@ export const removePostReaction = async (supabase: SupabaseClient, postId: strin
 
   return data
 
+}
+
+export const getPostsBySearch = async (supabase: SupabaseClient, search: string) => {
+  const { data, error } = await supabase
+    .from('posts_with_revision')
+    .select('*')
+    .ilike('text_only_content', `%${search}%`)
+    .limit(10)
+
+  if (error) throw error
+  
+  return data as PostWithRevision[]
 }

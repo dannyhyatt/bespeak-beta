@@ -117,16 +117,29 @@ export const addToReadlist = async (supabase: SupabaseClient, readlistID: string
 
 export const removeFromReadlist = async (supabase: SupabaseClient, readlistID: string, postID: string) => {
     
-    console.log('removing from readlist', readlistID, postID)
+  console.log('removing from readlist', readlistID, postID)
+
+  const { data, error } = await supabase
+    .from('readlist_items')
+    .delete()
+    .eq('readlist_id', readlistID)
+    .eq('post_id', postID)
+    .select()
+
+  if (error) throw error
+  return data
+
+}
+
+export const getReadlistsBySearch = async (supabase: SupabaseClient, search: string) => {
+    
+  const { data, error } = await supabase
+    .from('readlists_with_profile')
+    .select('*')
+    .ilike('name', `%${search}%`)
+    .limit(10)
   
-    const { data, error } = await supabase
-      .from('readlist_items')
-      .delete()
-      .eq('readlist_id', readlistID)
-      .eq('post_id', postID)
-      .select()
-  
-    if (error) throw error
-    return data
-  
-  }
+  if (error) throw error
+  return data as ReadlistWithProfile[]
+
+}
