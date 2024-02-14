@@ -67,6 +67,14 @@ export default async function Index({
         />
       }
 
+      <div className='flex mt-4'>
+        {post.tags.map(tag => (
+          <Link href='' key={tag} className="bg-gray-200 dark:bg-gray-700 mr-2 py-1 px-2 rounded-md">
+            {tag}
+          </Link>
+        ))}
+      </div>
+
       <BottomPostBar post={post} userID={profile?.id} initialReaction={reaction} />
 
     </StandardResponsivePage>

@@ -7,7 +7,7 @@ import { EditorProvider, ReactNodeViewRenderer, useCurrentEditor, useEditor } fr
 import StarterKit from '@tiptap/starter-kit'
 import React, { KeyboardEventHandler, useState } from 'react'
 
-import { PostWithRevision, createPost, updatePostRevision } from '@/utils/supabase/api/post'
+import { PostWithRevision, createPost, setTags, updatePostRevision } from '@/utils/supabase/api/post'
 
 import '../src/styles/editor.css'
 import { IconBold, IconClearFormatting, IconCode, IconItalic, IconLetterP, IconStrikethrough } from '@tabler/icons-react'
@@ -30,6 +30,7 @@ import { toHtml } from 'hast-util-to-html'
 import CollaboratorsModal from './CollaboratorsModal'
 import Image from '@tiptap/extension-image'
 import { Figure } from './plugins/Figure'
+import TagsEditor from './TagsEditor'
 
 
 const extensions = [
@@ -94,6 +95,8 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
 
   const [collaboratorsModalOpen, setCollaboratorsModalOpen] = useState<boolean>(false)
 
+  let tags = post?.tags || []
+
   let initialTitle: string | undefined = post?.title
   let currentTitle: string = initialTitle || ''
 
@@ -104,54 +107,64 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
 
 
   const saveHandler = async ({ publish } : { publish?: boolean }) => {
-    
+
+    if(post && tags != post?.tags) {
+      console.log('updating tags')
+      const res = await setTags(client, post.id, tags)
+    }
+
     console.log('get html defined?')
     if(getHTML == undefined) return
     console.log('get html not undefined')
     const currentHtml = getHTML()
 
     console.log('current html', currentHtml)
-    if(!currentTitle || !currentHtml) return
-    console.log('saving post')
-    let postId = post?.id
 
-    if(!postId) {
-      // todo turn this process into an RPC
-      postId = await createPost(client)
-    }
-
-    console.log('post id:', postId)
-
-    const body = { title: currentTitle, content: currentHtml, postId: postId }
-    console.log('sending body', body)
-    const {data, error} = await client.functions.invoke('upload_revision', {
-      body: body,
-    })
-    if(error) {
-      // todo show an error message
-      console.log('error', error)
-      return
-    }
-
-    console.log('received data', data)
-
-    const revisionId = data[0]?.id
-
-    if(revisionId && publish) {
-      await updatePostRevision(client, postId, revisionId)
-    }
-
-    // const revision = await createRevision(client, postId, currentTitle, currentHtml)
-
-    if(publish) {
-      router.push(`/post/${postId}`)
-      router.refresh()
-    } else if(revisionId) {
-      console.log('revision created')
-      console.log('hello???')
-      router.push(`/write/${postId}`)
-    } else {
-      console.log('revision failed')
+    if(currentTitle && currentHtml) {
+      console.log('saving post')
+      let postId = post?.id
+  
+      if(!postId) {
+        // todo turn this process into an RPC
+        postId = await createPost(client, tags)
+      } else if(tags != post?.tags) {
+        console.log('updating tags')
+        const res = await setTags(client, postId, tags)
+      }
+  
+      console.log('post id:', postId)
+  
+      const body = { title: currentTitle, content: currentHtml, postId: postId }
+      console.log('sending body', body)
+      const {data, error} = await client.functions.invoke('upload_revision', {
+        body: body,
+      })
+      if(error) {
+        // todo show an error message
+        console.log('error', error)
+        return
+      }
+  
+      console.log('received data', data)
+  
+      const revisionId = data[0]?.id
+  
+      if(revisionId && publish) {
+        await updatePostRevision(client, postId, revisionId)
+      }
+  
+      // const revision = await createRevision(client, postId, currentTitle, currentHtml)
+  
+      if(publish) {
+        router.push(`/post/${postId}`)
+        router.refresh()
+      } else if(revisionId) {
+        console.log('revision created')
+        console.log('hello???')
+        router.push(`/write/${postId}`)
+      } else {
+        console.log('revision failed')
+      }
     }
   }
 
@@ -192,6 +205,8 @@ export default function ArticleEditor({ post } : { post?: PostWithRevision }) {
         onSave={() => saveHandler({ publish: false})}
         onPublish={() => saveHandler({ publish: true})}
       />
+
+      <TagsEditor initialTags={post?.tags || []} onTagsChanged={(t) => { tags = t }} />
 
       {collaboratorsModalOpen && <CollaboratorsModal post={post} />}
     </>
