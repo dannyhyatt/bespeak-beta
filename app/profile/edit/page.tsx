@@ -9,8 +9,10 @@ import { SupabaseClient } from '@supabase/supabase-js'
 import { Revision, Post, getPostsByAuthorId } from '@/utils/supabase/api/post'
 import ProfileDisplay from '@/components/ProfileDisplay'
 import UploadAvatar from '@/components/UploadAvatar'
+import EditProfilePage from './EditProfilePage'
 
 export default async function Index() {
+
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
@@ -19,23 +21,12 @@ export default async function Index() {
 
   if(!profile) return redirect('/login')
   
-  const posts = await getPostsByAuthorId(supabase, profile.id)
-
   return (
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile}>
       
-      <h1 className='mb-4'>Edit Your Profile</h1>
-
-      <UploadAvatar profile={profile} />
-
-      <EditableProfileField className="font-bold text-4xl mb-1 underline"
-        profile={profile} displayFieldName="Name" dbField="full_name" initialValue={profile?.full_name} />
-      <EditableProfileField className="before:content-['@'] text-xl text-gray-700 dark:text-gray-300 mb-4 underline"
-        profile={profile} displayFieldName="Username" dbField="username" initialValue={profile?.username} />
-      <EditableProfileField className="text-gray-700 dark:text-gray-300 text-xl mb-4 underline"
-        profile={profile} displayFieldName="Bio" dbField="bio" initialValue={profile?.bio} />
-      <EditableProfileField className="text-gray-700 dark:text-gray-300 text-lg underline"
-        profile={profile} displayFieldName="Website" dbField="website" initialValue={profile?.website} />
+      <h1>Edit Your Profile</h1>
+      
+      <EditProfilePage profile={profile} />
 
     </StandardResponsivePage>
   )

@@ -69,7 +69,7 @@ export default async function Index({
 
       <div className='flex mt-4'>
         {post.tags.map(tag => (
-          <Link href={`/topic/${tag}`} key={tag} className="bg-gray-200 dark:bg-gray-700 mr-2 py-1 px-2 rounded-md">
+          <Link href={`/topic/${tag}`} key={tag} className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 mr-2 py-1 px-2 rounded-md">
             {tag}
           </Link>
         ))}

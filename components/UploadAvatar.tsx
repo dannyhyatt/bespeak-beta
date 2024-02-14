@@ -2,45 +2,30 @@
 
 import Profile, { getAvatarUrl } from "@/utils/supabase/api/profile";
 import { createClient } from "@/utils/supabase/client";
+import { SupabaseClient } from "@supabase/supabase-js";
 import { useState } from "react";
 
-export default function UploadAvatar({ profile } : { profile: Profile }) {
+export default function UploadAvatar({ profile, onFileAdded } : { profile: Profile, onFileAdded: (file: File) => void }) {
 
-  const [_, forceRebuild] = useState<number>(0)
+  // const [_, forceRebuild] = useState<number>(0)
+
+  const [avatarUrl, setAvatarUrl] = useState<string>(getAvatarUrl(createClient(), profile))
 
   const uploadAvatar = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
     if(!e.target.files) return console.error('no files')
+    onFileAdded(e.target.files[0])
 
-    const avatarFile = e.target.files[0]
-    const { data, error } = await createClient()
-      .storage
-      .from('avatars')
-      .upload(`${profile.id}`, avatarFile, {
-        cacheControl: '300', // 5 minutes
-        upsert: true,
-      })
+    setAvatarUrl(URL.createObjectURL(e.target.files[0]))
 
-    if (error) {
-      console.error(error)
-      return
-    }
-
-    // this refreshes the cache for other pages
-    await fetch(new URL(createClient()
-      .storage
-      .from('avatars')
-      .getPublicUrl(`${profile.username}.png`).data.publicUrl), {cache: "no-cache"})
-
-    forceRebuild(i => i + 1)
   }
 
   return (
     <>
       <label htmlFor="avatar_upload">
         <img
-          src={`${getAvatarUrl(createClient(), profile)}?time=${Date.now()}`}
-          className="h-32 aspect-square rounded-lg my-2 hover:opacity-70 cursor-pointer"
+          src={avatarUrl}
+          className="h-32 min-w-[8rem] w-32 aspect-square rounded-lg my-2 hover:opacity-70 cursor-pointer border-2"
         />
       </label>
       <input type="file" id="avatar_upload" className='hidden' accept=".png,.jpeg,.heic" onChange={uploadAvatar} />
