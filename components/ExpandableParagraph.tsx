@@ -1,5 +1,6 @@
 'use client'
 
+import { IconArrowUp, IconChevronUp } from "@tabler/icons-react"
 import { useState } from "react"
 
 export default function ExpandableParagraph({ children, className, ...props } : { children: React.ReactNode, className?: string }) {
@@ -10,9 +11,12 @@ export default function ExpandableParagraph({ children, className, ...props } : 
       <p 
         className={`${className} ${expanded ? '' : 'line-clamp-3'}`}
         {...props}
-        onClick={() => { setExpanded(!expanded) }}
+        onClick={() => { if(!expanded) setExpanded(true) }}
       >
         {children}
+        {expanded && 
+          <IconChevronUp className={`inline align-top bg-gray-200 dark:bg-gray-800 m-1 mt-0.5 rounded-md`} onClick={e => setExpanded(false)} />
+        }
       </p>
     )
   }

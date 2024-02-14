@@ -30,7 +30,7 @@ export default function AccountButton({profile}: {profile: Profile | undefined})
   }
 
   return profile ? (
-    <div onBlur={e => {}/* event => !event.currentTarget.contains(event.relatedTarget) && handleBlur() */} className="flex flex-col items-end gap-4">
+    <div onBlur={event => !event.currentTarget.contains(event.relatedTarget) && handleBlur()} className="flex flex-col items-end gap-4">
       <button onClick={handleClick} className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover text-base">
         {profile.full_name || profile.username || 'Account'}
       </button>
