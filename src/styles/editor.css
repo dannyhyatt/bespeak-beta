@@ -26,9 +26,9 @@
   pointer-events: none;
 }
 
-.tiptap > * + * {
+/* .tiptap > * + * {
   margin-top: 0.75em;
-}
+} */
 
 .iframe-wrapper {
   position: relative;
@@ -179,4 +179,20 @@
   .tiptap pre {
     border-radius: 0;
   }
-}  
+
+  .tiptap img, .tiptap figure img {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+    min-width: calc(100% + 1.5rem);
+    max-height: 64vh;
+    object-fit: contain;
+  }
+}
+
+.tiptap img, .tiptap figure img {
+  margin-left: -2rem;
+  margin-right: -2rem;
+  min-width: calc(100% + 4rem);
+  max-height: 64vh;
+  object-fit: contain;
+}
