@@ -8,9 +8,9 @@ const defaultUrl = process.env.VERCEL_URL
   : 'http://localhost:3000'
 
 
-const APP_NAME = "bespeak";
-const APP_DEFAULT_TITLE = "bespeak";
-const APP_TITLE_TEMPLATE = "%s | bespeak";
+const APP_NAME = "Bespeak";
+const APP_DEFAULT_TITLE = "Bespeak";
+const APP_TITLE_TEMPLATE = "%s | Bespeak";
 const APP_DESCRIPTION = "a social network for writers";
 
 export const metadata = {

@@ -15,7 +15,7 @@ export default function ExpandableParagraph({ children, className, ...props } : 
       >
         {children}
         {expanded && 
-          <IconChevronUp className={`inline align-top bg-gray-200 dark:bg-gray-800 m-1 mt-0.5 rounded-md`} onClick={e => setExpanded(false)} />
+          <IconChevronUp className={`inline align-top bg-gray-200 dark:bg-gray-800 m-1 mt-0.5 rounded-md cursor-pointer`} onClick={e => setExpanded(false)} />
         }
       </p>
     )

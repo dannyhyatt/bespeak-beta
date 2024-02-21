@@ -21,9 +21,9 @@ export default async function Index() {
   return (
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile} className='lg:w-7/12'>
       <h3 className='text-lg'>Welcome to</h3>
-      <h1 className='text-5xl mb-8 border-b-2'>Bespeak</h1>
+      <h1 className='text-5xl mb-8 border-b-2 font-serif'>Bespeak</h1>
       <h2 className='text-2xl mb-4 underline'>Trending This Week</h2>
-      <div className='flex flex-col items-center w-full [&>*]:w-full'>
+      <div className='flex flex-col items-center w-full [&>*]:w-[calc(100%+2rem)] [&>*]:mx-[-1rem]'>
         {posts.map(post => (
           <PostCard key={post.id} post={post} />
         ))}
