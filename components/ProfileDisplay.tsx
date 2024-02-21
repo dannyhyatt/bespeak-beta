@@ -16,8 +16,8 @@ export default function ProfileDisplay({ profile, supabase, isCurrentProfile } :
         <span className="flex flex-col py-1">
           <h2 className="font-bold text-3xl">{profile.full_name}</h2>
           <h3 className="before:content-['@'] text-xl text-gray-700 dark:text-gray-300 font-bold">
-              {profile?.username}
-            </h3>
+            {profile?.username}
+          </h3>
           <span className="flex-grow"></span>
           <Link className="text-gray-700 dark:text-gray-300 text-lg underline font-bold" href={profile.website || ''}>
             {profile.website}
