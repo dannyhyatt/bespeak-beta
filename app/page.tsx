@@ -5,6 +5,9 @@ import Header from '@/components/Header'
 import { cookies } from 'next/headers'
 import DefaultTopBar from '@/components/DefaultTopBar'
 import Profile, { getMyProfile } from '@/utils/supabase/api/profile'
+import StandardResponsivePage from '@/components/StandardResponsivePage'
+import { getWeekTopPosts } from '@/utils/supabase/api/post'
+import { PostCard } from '@/components/PostCard'
 
 export default async function Index() {
   const cookieStore = cookies()
@@ -13,31 +16,18 @@ export default async function Index() {
   const profile: Profile | undefined = await getMyProfile(supabase)
   const isSupabaseConnected = profile != null
 
+  const posts = await getWeekTopPosts(supabase)
+
   return (
-    <div className="flex-1 w-full flex flex-col gap-20 items-center">
-      <DefaultTopBar isSupabaseConnected={isSupabaseConnected} profile={profile} />
-
-      <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
-        <Header />
-        <main className="flex-1 flex flex-col gap-6">
-          <h2 className="font-bold text-4xl mb-4">Next steps</h2>
-          {isSupabaseConnected ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
-        </main>
+    <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile} className='lg:w-7/12'>
+      <h3 className='text-lg'>Welcome to</h3>
+      <h1 className='text-5xl mb-8 border-b-2'>Bespeak</h1>
+      <h2 className='text-2xl mb-4 underline'>Trending This Week</h2>
+      <div className='flex flex-col items-center w-full [&>*]:w-full'>
+        {posts.map(post => (
+          <PostCard key={post.id} post={post} />
+        ))}
       </div>
-
-      <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
-        <p>
-          Powered by{' '}
-          <a
-            href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-            target="_blank"
-            className="font-bold hover:underline"
-            rel="noreferrer"
-          >
-            Supabase
-          </a>
-        </p>
-      </footer>
-    </div>
+    </StandardResponsivePage>
   )
 }

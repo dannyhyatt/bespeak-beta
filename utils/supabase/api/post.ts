@@ -286,3 +286,11 @@ export const getPostsByTag = async (supabase: SupabaseClient, tags: string) => {
   
   return data as PostWithRevision[]
 }
+
+export const getWeekTopPosts = async (supabase: SupabaseClient) => {
+  const { data, error } = await supabase.rpc('get_week_top_posts')
+
+  if (error) throw error
+  
+  return data as PostWithRevision[]
+}
