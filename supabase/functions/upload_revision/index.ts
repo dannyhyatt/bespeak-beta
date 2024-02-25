@@ -5,6 +5,12 @@
 import sanitizeHtml from "https://esm.sh/sanitize-html@2.11.0";
 import { convert } from "https://esm.sh/html-to-text@9.0.5";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.2"
+import * as cheerio from "https://esm.sh/cheerio@1.0.0-rc.12"
+import * as thumbhash from "https://esm.sh/thumbhash@0.1.1"
+// import sharp from "https://esm.sh/sharp@0.33.2"
+import {Image, decode} from "https://deno.land/x/imagescript@1.2.17/mod.ts"
+import axios from "https://esm.sh/axios@1.6.7"
+import { resize } from "https://deno.land/x/imagescript@1.2.17/v2/ops/index.mjs";
 
 console.log("Hello from Functions!")
 
@@ -61,7 +67,6 @@ Deno.serve(async (req) => {
     const reqData = await req.json()
     console.log('starting...', reqData)
 
-
     const { title, content, postId } = reqData
 
     console.log('unsanitized content: ', content)
@@ -70,11 +75,59 @@ Deno.serve(async (req) => {
 
     console.log('sanitized content: ', safeContent)
 
+    const $ = cheerio.load(content)
+
+    const imgs = $('img')
+
+    for(let i = 0; i < imgs.length; i++) {
+      if(imgs[i].attribs.src) {
+        const src = imgs[i].attribs.src
+        console.log('src: ', src)
+        const res = await axios({ url: src, responseType: "arraybuffer" })
+        console.log(JSON.stringify(res.data))
+        const input = res.data as Buffer
+        console.log('input: ', input)
+        const image = await decode(input)
+        const originalHeight = image.height
+        const originalWidth = image.width
+        console.log('image: ', image.width)
+        console.log('image: ', image.height)
+
+        const resizedImage = image.resize(100, 100)
+        
+        if(!resizedImage) { 
+          console.log('no resized image')
+          continue
+         }
+  
+        console.log('resizedImage: ', resizedImage.width, 'x', resizedImage.height)
+        const binaryThumbHash = thumbhash.rgbaToThumbHash(resizedImage.height, resizedImage.width, resizedImage.bitmap)
+        console.log('123')
+        // console.log('binaryThumbHash:', Buffer.from(binaryThumbHash))
+        console.log('456')
+
+        // ThumbHash to data URL (can be done on the client, not the server)
+        const placeholderURL = thumbhash.thumbHashToDataURL(binaryThumbHash)
+        console.log('placeholderURL:', placeholderURL)
+
+        imgs[i].attribs.loading = 'lazy'
+        imgs[i].attribs.style = `background-image: url(${placeholderURL}); background-size: ${originalWidth} ${originalHeight}; aspect-ratio: ${originalWidth} / ${originalHeight};`;
+
+        console.log(imgs[i])
+        
+        console.log('done 2')
+
+      }
+    }
+
+    const safeContent2 = $.html()
+    console.log('safeContent2: ', safeContent2)
+
     const textContent = convert(content, {selectors: [ { selector: 'a', options: { ignoreHref: true } } ]})
     
     // todo add db constraint that the user must be the author of the post
     const { data, error } = await adminSupabase.from('post_revisions').insert(
-      { title, content: safeContent, text_only_content: textContent, post_id: postId },
+      { title, content: safeContent2, text_only_content: textContent, post_id: postId },
     ).select('*')
 
     if(error) {

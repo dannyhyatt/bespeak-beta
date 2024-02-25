@@ -9,6 +9,7 @@ import { IconAd, IconAlignCenter, IconAlignJustified, IconAlignLeft, IconAlignRi
 import { createClient } from '@/utils/supabase/client'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Post } from '@/utils/supabase/api/post'
+import { rgbaToThumbHash, thumbHashToDataURL } from 'thumbhash'
 
 export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID: string | undefined } ) => {
   const { editor } = useCurrentEditor()
@@ -399,6 +400,31 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
 
               console.log(`${postID}/${Date.now()}`);
 
+              const file = input.files[0]
+
+              const objUrl = URL.createObjectURL(file)
+              const img = new Image()
+              img.src = objUrl
+              await new Promise(r => img.onload = r)
+
+              const size = Math.max(img.width, img.height)
+              const w = img.width = Math.round(100 * img.width / size)
+              const h = img.height = Math.round(100 * img.height / size)
+              
+              const canvas = document.createElement('canvas')
+              const c = canvas.getContext('2d')
+              canvas.width = w
+              canvas.height = h
+              c?.drawImage(img, 0, 0, w, h)
+              const imgData = c?.getImageData(0, 0, w, h).data
+
+              const hash = rgbaToThumbHash(w, h, imgData as ArrayLike<number>)
+              const thumbImg = new Image
+              thumbImg.src = thumbHashToDataURL(hash)
+
+              console.log('hash', hash)
+              console.log('thumbImg', thumbImg)
+
               const { data, error } = await supabase
                 .storage
                 .from('article_images')
@@ -415,8 +441,6 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
 
               const url = supabase.storage.from('article_images').getPublicUrl(data.path).data.publicUrl;
               
-              editor.chain().focus().setImage({ src: url }).run()
-
               // var reader = new FileReader();
           
               // reader.onload = function (e) {
