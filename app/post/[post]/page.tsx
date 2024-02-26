@@ -10,6 +10,7 @@ import { LinkCSS, PostContentCSS, PostTitleCSS } from '@/components/CSSConsts'
 
 import '../../../src/styles/editor.css'
 import { format, parseISO } from 'date-fns'
+import PostContent from '@/components/PostContent'
 
 export default async function Index({
   params
@@ -60,12 +61,7 @@ export default async function Index({
         <span className="align-middle"> on {format(parseISO(post.created_at), 'MMMM d, yyyy')}</span>
       </span>
       
-      {
-        <div 
-          className={`${PostContentCSS}`}
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
-      }
+      <PostContent innerHTML={post.content} />
 
       <div className='flex mt-4'>
         {post.tags.map(tag => (

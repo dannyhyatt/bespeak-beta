@@ -24,7 +24,7 @@ export default function BottomPostBar({ post, userID, initialReaction } : { post
   const shareArticle = () => {
     if (navigator.share) {
       navigator.share({
-        text: `Check out this artic'like'le on Bespeak!`,
+        text: `Check out this article on Bespeak!`,
         url: `${window.location.href}`
       })
     } else {

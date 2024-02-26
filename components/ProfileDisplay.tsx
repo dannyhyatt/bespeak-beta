@@ -11,7 +11,7 @@ export default function ProfileDisplay({ profile, supabase, isCurrentProfile } :
   return (
     <>
       <h1 className="text-xl font-bold border-b-2">Profile {isCurrentProfile && <Link href={`/profile/edit`} className={LinkCSS}>(Edit)</Link>}</h1>
-      <div className="flex my-4 rounded-md sm:mx-[-1rem]">
+      <div className="flex my-4 rounded-md">
         <img className="h-32 aspect-square rounded-lg mr-4 bg-slate-500" src={getAvatarUrl(supabase, profile)} />
         <span className="flex flex-col py-1">
           <h2 className="font-bold text-3xl">{profile.full_name}</h2>
@@ -25,7 +25,7 @@ export default function ProfileDisplay({ profile, supabase, isCurrentProfile } :
         </span>
       </div>
       <ExpandableParagraph 
-        className={`text-gray-700 dark:text-gray-300 text-xl mb-4 overflow-x-auto sm:mx-[-0.5rem]`}
+        className={`text-gray-700 dark:text-gray-300 text-xl mb-4 overflow-x-auto`}
       >
         {profile.bio}
       </ExpandableParagraph>

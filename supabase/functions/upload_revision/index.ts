@@ -10,6 +10,7 @@ import * as thumbhash from "https://esm.sh/thumbhash@0.1.1"
 // import sharp from "https://esm.sh/sharp@0.33.2"
 import {Image, decode} from "https://deno.land/x/imagescript@1.2.17/mod.ts"
 import axios from "https://esm.sh/axios@1.6.7"
+import * as Base64 from 'https://deno.land/std@0.76.0/encoding/base64.ts';
 import { resize } from "https://deno.land/x/imagescript@1.2.17/v2/ops/index.mjs";
 
 console.log("Hello from Functions!")
@@ -48,9 +49,6 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
-
-  console.log('url? ', Deno.env.get('SUPABASE_URL'))
-  console.log('key? ', Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')?.substring(0, 5))
 
   const adminSupabase = createClient(
     Deno.env.get('SUPABASE_URL') ?? '',
@@ -103,15 +101,15 @@ Deno.serve(async (req) => {
         console.log('resizedImage: ', resizedImage.width, 'x', resizedImage.height)
         const binaryThumbHash = thumbhash.rgbaToThumbHash(resizedImage.height, resizedImage.width, resizedImage.bitmap)
         console.log('123')
-        // console.log('binaryThumbHash:', Buffer.from(binaryThumbHash))
+        const binaryThumbHashString = btoa(String.fromCharCode(...binaryThumbHash));
+        console.log('binaryThumbHash:', binaryThumbHashString)
         console.log('456')
 
-        // ThumbHash to data URL (can be done on the client, not the server)
-        const placeholderURL = thumbhash.thumbHashToDataURL(binaryThumbHash)
-        console.log('placeholderURL:', placeholderURL)
-
+        imgs[i].attribs['data-thumbhash'] = binaryThumbHashString
+        imgs[i].attribs['data-original-width'] = originalWidth + ""
+        imgs[i].attribs['data-original-height'] = originalHeight + ""
         imgs[i].attribs.loading = 'lazy'
-        imgs[i].attribs.style = `background-image: url(${placeholderURL}); background-size: ${originalWidth} ${originalHeight}; aspect-ratio: ${originalWidth} / ${originalHeight};`;
+        imgs[i].attribs.style = `aspect-ratio: ${originalWidth} / ${originalHeight};`
 
         console.log(imgs[i])
         
@@ -123,7 +121,7 @@ Deno.serve(async (req) => {
     const safeContent2 = $.html()
     console.log('safeContent2: ', safeContent2)
 
-    const textContent = convert(content, {selectors: [ { selector: 'a', options: { ignoreHref: true } } ]})
+    const textContent = convert(content, {selectors: [ { selector: 'a', options: { ignoreHref: true } }, { selector: 'img', format: 'skip' } ]})
     
     // todo add db constraint that the user must be the author of the post
     const { data, error } = await adminSupabase.from('post_revisions').insert(
