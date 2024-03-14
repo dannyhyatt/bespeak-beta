@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import Profile, { getMyProfile } from '@/utils/supabase/api/profile'
+import Profile, { getMyProfile, isFollowingProfile } from '@/utils/supabase/api/profile'
 import EditableProfileField from '@/components/EditableProfileField'
 import StandardResponsivePage from '@/components/StandardResponsivePage'
 import PostList from '@/components/PostList'
@@ -23,11 +23,13 @@ export default async function Index() {
   const posts = await getPostsByAuthorId(supabase, profile.id)
 
   const readlists = await getReadlists(supabase, profile.id)
-
+  
+  const isFollowing = await isFollowingProfile(supabase, profile.id)
+  
   return (
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile}>
       
-      <ProfilePage profile={profile} posts={posts} initialReadlists={readlists} viewingProfile={profile} />
+      <ProfilePage profile={profile} posts={posts} initialReadlists={readlists} viewingProfile={profile} isFollowing={isFollowing} />
       
     </StandardResponsivePage>
   )

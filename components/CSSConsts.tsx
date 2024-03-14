@@ -6,4 +6,4 @@ export const PostContentCSS = 'prose dark:prose-invert prose-md lg:prose-lg focu
 
 export const ButtonCSS = 'flex gap-2 justify-center items-center hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded-md cursor-pointer'
 
-export const ActionButtonCSS = 'bg-gray-800 text-white font-semibold px-3 py-2 rounded-md mr-2 cursor-pointer hover:bg-gray-700 dark:hover:bg-gray-900'
+export const ActionButtonCSS = 'flex gap-2 bg-gray-800 text-white font-semibold px-3 py-2 rounded-md mr-2 cursor-pointer hover:bg-gray-700 dark:hover:bg-gray-900'

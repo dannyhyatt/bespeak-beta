@@ -294,3 +294,11 @@ export const getWeekTopPosts = async (supabase: SupabaseClient) => {
   
   return data as PostWithRevision[]
 }
+
+export const getFeed = async (supabase: SupabaseClient) => {
+  const { data, error } = await supabase.rpc('get_feed')
+
+  if (error) throw error
+  
+  return data as PostWithRevision[]
+}

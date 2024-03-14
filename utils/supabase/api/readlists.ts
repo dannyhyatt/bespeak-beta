@@ -143,3 +143,38 @@ export const getReadlistsBySearch = async (supabase: SupabaseClient, search: str
   return data as ReadlistWithProfile[]
 
 }
+
+export const isFollowingReadlist = async (supabase: SupabaseClient, readlistID: string) => {
+      
+  const { data, error } = await supabase
+    .from('readlist_followers')
+    .select('*')
+    .eq('following', readlistID)
+  
+  if (error) throw error
+  return data.length > 0
+
+}
+
+export const followReadlist = async (supabase: SupabaseClient, readlistID: string) => {
+    
+  const { data, error } = await supabase
+    .from('readlist_followers')
+    .insert({ following: readlistID })
+  
+  if (error) throw error
+  return data
+
+}
+
+export const unfollowReadlist = async (supabase: SupabaseClient, readlistID: string) => {
+      
+    const { data, error } = await supabase
+      .from('readlist_followers')
+      .delete()
+      .eq('following', readlistID)
+    
+    if (error) throw error
+    return data
+  
+  }

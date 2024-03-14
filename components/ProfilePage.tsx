@@ -13,7 +13,7 @@ import Readlist from "@/utils/supabase/api/readlists"
 import { read } from "fs"
 import Link from "next/link"
 
-export default function ProfilePage({ viewingProfile, posts, initialReadlists, profile } : { viewingProfile: Profile, posts: PostWithRevision[], initialReadlists: Readlist[], profile: Profile | undefined }) {
+export default function ProfilePage({ viewingProfile, posts, initialReadlists, profile, isFollowing } : { viewingProfile: Profile, posts: PostWithRevision[], initialReadlists: Readlist[], profile: Profile | undefined, isFollowing: boolean }) {
 
   const [showing, setShowing] = useState<'posts' | 'lists'>('posts')
 
@@ -27,7 +27,7 @@ export default function ProfilePage({ viewingProfile, posts, initialReadlists, p
   
   return (
     <>
-      <ProfileDisplay profile={viewingProfile} supabase={createClient()} isCurrentProfile={isCurrentProfile} />
+      <ProfileDisplay profile={viewingProfile} supabase={createClient()} isCurrentProfile={isCurrentProfile} isFollowing={isFollowing} />
       
       <div className='flex flex-row items-start gap-2'>
         <h1

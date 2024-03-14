@@ -1,7 +1,8 @@
+import ReadlistFollowButton from "@/components/FollowButtons/ReadlistFollowButton";
 import { PostCard } from "@/components/PostCard";
 import StandardResponsivePage from "@/components/StandardResponsivePage";
 import Profile, { getMyProfile } from "@/utils/supabase/api/profile";
-import { getPostsByReadlist, getReadlistById, getReadlistByIdWithProfile } from "@/utils/supabase/api/readlists";
+import { getPostsByReadlist, getReadlistById, getReadlistByIdWithProfile, isFollowingReadlist } from "@/utils/supabase/api/readlists";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import Link from "next/link";
@@ -20,9 +21,15 @@ export default async function Index({
 
   const posts = await getPostsByReadlist(supabase, params.list)
 
+  const isFollowing = await isFollowingReadlist(supabase, params.list)
+
   return (
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile}>
-      <h1 className="text-xl font-bold border-b-2 mb-4">{readlist.name} <span className="text-lg font-normal">by <Link href={`/@${readlist.username}`}>@{readlist.username}</Link> </span></h1>
+      <h1 className="text-xl font-bold mb-4">
+        {readlist.name}{' '}
+        <span className="text-lg font-normal">by <Link href={`/@${readlist.username}`}>@{readlist.username}</Link> </span>
+        <ReadlistFollowButton isFollowing={isFollowing} readlist={readlist} /> 
+      </h1>
       {
         posts.map(post => (
           <PostCard key={post.id} post={post} />

@@ -96,3 +96,33 @@ export const getAvatarUrl = (supabase: SupabaseClient, profile: Profile) => {
     return 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'
   }
 }
+
+// this depends on rls to work
+export const isFollowingProfile = async (supabase: SupabaseClient, profileId: string) => {
+  const { data, error } = await supabase
+    .from('author_followers')
+    .select('following')
+    .eq('following', profileId)
+
+  if (error) throw error
+  return data.length > 0
+}
+
+export const followProfile = async (supabase: SupabaseClient, profileId: string) => {
+  const { data, error } = await supabase
+    .from('author_followers')
+    .insert({ following: profileId })
+
+  if (error) throw error
+  return data
+}
+
+export const unfollowProfile = async (supabase: SupabaseClient, profileId: string) => {
+  const { data, error } = await supabase
+    .from('author_followers')
+    .delete()
+    .eq('following', profileId)
+
+  if (error) throw error
+  return data
+}
