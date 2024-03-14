@@ -15,6 +15,10 @@ module.exports = {
       {
         source: '/@:username',
         destination: '/users/:username'
+      },
+      {
+        source: '/~:publication',
+        destination: '/publication/:publication'
       }
     ]
   }
