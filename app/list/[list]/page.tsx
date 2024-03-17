@@ -26,8 +26,11 @@ export default async function Index({
   return (
     <StandardResponsivePage isSupabaseConnected={isSupabaseConnected} profile={profile}>
       <h1 className="text-xl font-bold mb-4">
-        {readlist.name}{' '}
-        <span className="text-lg font-normal">by <Link href={`/@${readlist.username}`}>@{readlist.username}</Link> </span>
+        <span className="border-b-2 border-black dark:border-white">
+          {readlist.name}{' '}
+          <span className="text-lg font-normal">by <Link href={`/@${readlist.username}`}>@{readlist.username}</Link></span>
+        </span>
+        {' '}
         <ReadlistFollowButton isFollowing={isFollowing} readlist={readlist} /> 
       </h1>
       {

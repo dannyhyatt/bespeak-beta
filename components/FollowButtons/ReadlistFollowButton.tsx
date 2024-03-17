@@ -29,7 +29,7 @@ export default function ReadlistFollowButton({ isFollowing, readlist } : { isFol
   }
 
   return (
-    <button className={`inline-flex gap-2 text-base bg-gray-200 text-black font-semibold px-3 py-1 align-bottom mb-0.5 ml-1.5 rounded-md mr-2 cursor-pointer hover:bg-gray-300`} onClick={following ? unfollow : follow} disabled={loading}>
+    <button className={`inline-flex gap-2 text-base bg-gray-200 text-black font-semibold px-3 py-1 align-baseline mb-0.5 ml-1.5 rounded-md mr-2 cursor-pointer hover:bg-gray-300`} onClick={following ? unfollow : follow} disabled={loading}>
       {following ? 'Following' : 'Follow'}
       {following && <IconCheck strokeWidth='1.7px' />}
     </button>
