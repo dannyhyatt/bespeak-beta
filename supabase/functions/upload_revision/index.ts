@@ -12,6 +12,7 @@ import {Image, decode} from "https://deno.land/x/imagescript@1.2.17/mod.ts"
 import axios from "https://esm.sh/axios@1.6.7"
 import * as Base64 from 'https://deno.land/std@0.76.0/encoding/base64.ts';
 import { resize } from "https://deno.land/x/imagescript@1.2.17/v2/ops/index.mjs";
+import { Buffer } from "https://deno.land/x/imagescript@1.2.17/utils/buffer.js";
 
 console.log("Hello from Functions!")
 

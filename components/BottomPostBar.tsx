@@ -7,9 +7,10 @@ import { useEffect, useState } from "react";
 import CommentList from "./CommentsList";
 import SaveToListModal from "./SaveToListModal";
 import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 
 
-export default function BottomPostBar({ post, userID, initialReaction } : { post: PostWithRevision, userID: string | undefined, initialReaction?: 'like' | 'dislike'}) {
+export default function BottomPostBar({ post, userID, initialReaction }: { post: PostWithRevision, userID: string | undefined, initialReaction?: 'like' | 'dislike' }) {
 
   const [expanded, setExpanded] = useState<boolean>(false)
   const [canShare, setCanShare] = useState<boolean>(false)
@@ -20,6 +21,8 @@ export default function BottomPostBar({ post, userID, initialReaction } : { post
   const [showComments, setShowComments] = useState<boolean>(false)
 
   const [reaction, setReaction] = useState<'like' | 'dislike' | undefined>(initialReaction)
+
+  const router = useRouter()
 
   const shareArticle = () => {
     if (navigator.share) {
@@ -36,12 +39,15 @@ export default function BottomPostBar({ post, userID, initialReaction } : { post
   }
 
   const likeBtnPress = async () => {
-    if(!userID) return // todo show a sign-in message
-    if(reaction == undefined) {
+    if (!userID) {
+      router.push('/login?next=' + window.location.pathname)
+      return
+    }
+    if (reaction == undefined) {
       await likePost(createClient(), post.id)
       post.likes++
       setReaction('like')
-    } else if(reaction == 'dislike') {
+    } else if (reaction == 'dislike') {
       await updatePostReaction(createClient(), post.id, true)
       post.likes++
       post.dislikes--
@@ -54,12 +60,12 @@ export default function BottomPostBar({ post, userID, initialReaction } : { post
   }
 
   const dislikeBtnPress = async () => {
-    if(!userID) return // todo show a sign-in message
-    if(reaction == undefined) {
+    if (!userID) return // todo show a sign-in message
+    if (reaction == undefined) {
       await dislikePost(createClient(), post.id)
       post.dislikes++
       setReaction('dislike')
-    } else if(reaction == 'like') {
+    } else if (reaction == 'like') {
       await updatePostReaction(createClient(), post.id, false)
       post.likes--
       post.dislikes++
@@ -77,7 +83,7 @@ export default function BottomPostBar({ post, userID, initialReaction } : { post
 
   return (
     <>
-      { /* todo make the height transition work when the comments are shown */ }
+      { /* todo make the height transition work when the comments are shown */}
       <div className={`flex flex-col transition-all sticky ${showComments ? 'bottom-4' : 'sm:rounded-b-none bottom-[-0.25rem]'}  mt-8 mx-[-0.75rem] border-x-0 border-2 border-r-0 bg-background text-foreground 
                       sm:mx-[-1rem] sm:px-2 sm:rounded-lg sm:border-x-2
                       pb-[max(calc(env(safe-area-inset-bottom)-8px),0px)]`}>
@@ -92,15 +98,15 @@ export default function BottomPostBar({ post, userID, initialReaction } : { post
               >
                 <BookmarkIcon />
               </span>
-              <span 
+              <span
                 onClick={shareArticle}
                 className="p-2 m-1 hover:bg-gray-200 hover:dark:bg-gray-700 rounded-md cursor-pointer">
-                  {canShare ? <ShareIcon /> : 
-                    showCopied ? <IconCopyCheck /> : <IconCopy />}
+                {canShare ? <ShareIcon /> :
+                  showCopied ? <IconCopyCheck /> : <IconCopy />}
               </span>
             </span>
             <span className="hidden">
-              <span 
+              <span
                 className="p-2 m-1 hover:bg-gray-200 hover:dark:bg-gray-700 rounded-md cursor-pointer"
                 onClick={() => setExpanded(!expanded)}
               >
@@ -110,8 +116,8 @@ export default function BottomPostBar({ post, userID, initialReaction } : { post
           </span>
 
           <span>
-            <span className="flex">
-              <span 
+            <span className="flex mx-1">
+              <span
                 className="p-2 m-1 hover:bg-gray-200 hover:dark:bg-gray-700 rounded-md cursor-pointer"
                 onClick={() => setShowComments(!showComments)}
               >
@@ -127,7 +133,7 @@ export default function BottomPostBar({ post, userID, initialReaction } : { post
               </span>
               <span
                 onClick={dislikeBtnPress}
-                className={`${reaction == 'dislike' && 'bg-gray-200 dark:bg-gray-600'} p-2 m-1 hover:bg-gray-300 hover:dark:bg-gray-700 rounded-md cursor-pointer flex gap-2 mr-0`}
+                className={`${reaction == 'dislike' && 'bg-gray-200 dark:bg-gray-600'} p-2 m-1 hover:bg-gray-300 hover:dark:bg-gray-700 rounded-md cursor-pointer flex gap-2 mr-1`}
               >
                 {post.dislikes}<ThumbsDownIcon />
               </span>
@@ -142,7 +148,7 @@ export default function BottomPostBar({ post, userID, initialReaction } : { post
             <CommentList replyToId={null} postId={post.id} />
           </span>
         }
-        
+
       </div>
 
       {

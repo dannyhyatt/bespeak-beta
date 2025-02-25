@@ -7,19 +7,18 @@ import ActionButton from '@/components/ActionButton'
 import LoginWithGoogleButton from '@/components/LoginWithGoogleButton'
 import Profile, { getMyProfile } from '@/utils/supabase/api/profile'
 import EmailCodeModalWithToggle from '@/components/EmailCodeModalWithToggle'
+import next from 'next'
 
 export default async function Login({
   searchParams,
 }: {
-  searchParams: { message: string }
+  searchParams: { message: string | undefined, next: string | undefined }
 }) {
   const signInWithEmail = async (formData: FormData) => {
     'use server'
 
     console.log('hello');
 
-    // const origin = headers().get('origin')
-    
     const email = formData.get('email') as string
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
@@ -28,7 +27,7 @@ export default async function Login({
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${origin}/auth/callback`,
+        emailRedirectTo: `${origin}/auth/callback${searchParams.next ? `?next=${searchParams.next}` : ''}`,
       }
     })
 
@@ -47,8 +46,9 @@ export default async function Login({
   const user = await supabase.auth.getUser()
   const profile: Profile | undefined = await getMyProfile(supabase)
 
-  if(profile) return redirect('/profile')
-  if(user.data.user) return redirect('/create-profile')
+  if (profile && searchParams.next) return redirect(searchParams.next)
+  if (profile) return redirect('/profile')
+  if (user.data.user) return redirect('/create-profile')
 
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
@@ -102,7 +102,7 @@ export default async function Login({
 
         <hr className="my-4" />
 
-        <LoginWithGoogleButton />
+        <LoginWithGoogleButton next={searchParams.next} />
 
         <EmailCodeModalWithToggle />
 

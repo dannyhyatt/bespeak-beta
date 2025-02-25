@@ -8,14 +8,15 @@ export async function GET(request: Request) {
   // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-sign-in-with-code-exchange
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
+  const nextUrl = requestUrl.searchParams.get('next')
 
   if (code) {
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
     await supabase.auth.exchangeCodeForSession(code)
-    await supabase.auth.getUser();
+    await supabase.auth.getUser()
   }
 
   // URL to redirect to after sign in process completes
-  return NextResponse.redirect(requestUrl.origin)
+  return NextResponse.redirect(nextUrl ?? requestUrl.origin)
 }

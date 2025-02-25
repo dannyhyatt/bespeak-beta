@@ -11,7 +11,7 @@ import { SupabaseClient } from '@supabase/supabase-js'
 import { Post } from '@/utils/supabase/api/post'
 import { rgbaToThumbHash, thumbHashToDataURL } from 'thumbhash'
 
-export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID: string | undefined } ) => {
+export const MenuBar = ({ supabase, postID }: { supabase: SupabaseClient, postID: string | undefined }) => {
   const { editor } = useCurrentEditor()
 
   const [activeDropdown, setActiveDropdown] = React.useState<string | null>(null)
@@ -31,7 +31,7 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
           [&>div>button] = dropdown button
           [&>div>div] = dropdown container
           [&>div>div>button] = buttons in dropdowns */}
-          
+
       <div className={`flex flex-wrap my-4 border-2 rounded-md sticky top-20 bg-background z-10 mx-[-0.5rem] sm:mx-[-4rem]
                       [&>button]:m-1 [&>button]:p-1 [&>button.is-active]:bg-gray-300 [&>button.is-active]:dark:bg-gray-600 [&>button]:min-w-[2rem] [&>button]:rounded-md
                       [&>button:hover]:bg-gray-200 [&>button:hover]:dark:bg-gray-700 [&>button]:flex [&>*]:justify-center
@@ -115,7 +115,7 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
         >
           <IconCode />
         </button>
-        <button 
+        <button
           onClick={() => editor.chain().focus().unsetAllMarks().run()}
           title="Clear Marks"
         >
@@ -129,7 +129,7 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
 
         <div className='relative'>
           <button onClick={(e) => {
-            if(activeDropdown == AlignmentDropdown) {
+            if (activeDropdown == AlignmentDropdown) {
               setActiveDropdown(null)
             } else {
               setActiveDropdown(AlignmentDropdown)
@@ -138,9 +138,9 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
           >
             {
               editor.isActive({ textAlign: 'left' }) ? <IconAlignLeft /> :
-              editor.isActive({ textAlign: 'center' }) ? <IconAlignCenter /> :
-              editor.isActive({ textAlign: 'right' }) ? <IconAlignRight /> :
-              editor.isActive({ textAlign: 'justify' }) ? <IconAlignJustified /> : 'Alignment'
+                editor.isActive({ textAlign: 'center' }) ? <IconAlignCenter /> :
+                  editor.isActive({ textAlign: 'right' }) ? <IconAlignRight /> :
+                    editor.isActive({ textAlign: 'justify' }) ? <IconAlignJustified /> : 'Alignment'
             } <><IconCaretDownFilled size={16} className='self-center' /></>
           </button>
 
@@ -190,7 +190,7 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
         <span className="divider"></span>
         <div className='relative'>
           <button onClick={(e) => {
-            if(activeDropdown == FormattingDropdown) {
+            if (activeDropdown == FormattingDropdown) {
               setActiveDropdown(null)
             } else {
               setActiveDropdown(FormattingDropdown)
@@ -199,12 +199,12 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
           >
             {
               editor.isActive('paragraph') ? <><IconLetterP /> Paragraph</> :
-              editor.isActive('heading', { level: 1 }) ? <><IconHeading /> Heading</> :
-              editor.isActive('heading', { level: 2 }) ? <><IconH2 /> Heading 2</> :
-              editor.isActive('heading', { level: 3 }) ? <><IconH3 /> Heading 3</> :
-              editor.isActive('heading', { level: 4 }) ? <><IconH4 /> Heading 4</> :
-              editor.isActive('heading', { level: 5 }) ? <><IconH5 /> Heading 5</> :
-              editor.isActive('heading', { level: 6 }) ? <><IconH6 /> Heading 6</> : 'Formatting'
+                editor.isActive('heading', { level: 1 }) ? <><IconHeading /> Heading</> :
+                  editor.isActive('heading', { level: 2 }) ? <><IconH2 /> Heading 2</> :
+                    editor.isActive('heading', { level: 3 }) ? <><IconH3 /> Heading 3</> :
+                      editor.isActive('heading', { level: 4 }) ? <><IconH4 /> Heading 4</> :
+                        editor.isActive('heading', { level: 5 }) ? <><IconH5 /> Heading 5</> :
+                          editor.isActive('heading', { level: 6 }) ? <><IconH6 /> Heading 6</> : 'Formatting'
             } <><IconCaretDownFilled size={16} className='self-center' /></>
           </button>
 
@@ -303,7 +303,7 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
           <IconBlockquote />
         </button>
         <button onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          title='Horizontal Rule'        
+          title='Horizontal Rule'
         >
           <IconSpacingVertical />
         </button>
@@ -358,7 +358,7 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
         <div className='relative'>
           <button
             onClick={() => {
-              if(activeDropdown == 'link') {
+              if (activeDropdown == 'link') {
                 setActiveDropdown(null)
               } else {
                 setActiveDropdown('link')
@@ -370,87 +370,87 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
             <IconLink /> <IconCaretDownFilled size={16} className='self-center' />
           </button>
           <div className={`flex absolute bg-background border-2 rounded-md ${activeDropdown == 'link' ? '' : 'hidden'}`}>
-            <input type='text' placeholder='https://website.com' className='p-1 m-1 rounded-md bg-background' 
+            <input type='text' placeholder='https://website.com' className='p-1 m-1 rounded-md bg-background'
               onChange={(e) => {
                 setLinkText(e.target.value)
               }}
-              value={linkText ?? editor.getAttributes('link').href ?? ''} 
+              value={linkText ?? editor.getAttributes('link').href ?? ''}
             />
             <button
               onClick={() => {
                 setActiveDropdown(null)
-                if(editor.getAttributes('link').href == linkText || !linkText)
+                if (editor.getAttributes('link').href == linkText || !linkText)
                   editor.chain().focus().unsetLink().run()
                 else
                   editor.chain().focus().setLink({ href: linkText }).run()
               }}
               title='Unset Link'
             >
-              {editor.getAttributes('link').href != linkText ? <IconLink /> : <IconUnlink /> }
+              {editor.getAttributes('link').href != linkText ? <IconLink /> : <IconUnlink />}
             </button>
           </div>
         </div>
 
         <span className="divider"></span>
 
-        
+
         <input id="image-upload" type="file" className='hidden' accept=".png,.jpeg,.heic" onChange={async (e) => {
-            const input = e.target;
-            if (input.files && input.files[0]) {
+          const input = e.target;
+          if (input.files && input.files[0]) {
 
-              console.log(`${postID}/${Date.now()}`);
+            console.log(`${postID}/${Date.now()}`);
 
-              const file = input.files[0]
+            const file = input.files[0]
 
-              const objUrl = URL.createObjectURL(file)
-              const img = new Image()
-              img.src = objUrl
-              await new Promise(r => img.onload = r)
+            const objUrl = URL.createObjectURL(file)
+            const img = new Image()
+            img.src = objUrl
+            await new Promise(r => img.onload = r)
 
-              const size = Math.max(img.width, img.height)
-              const w = img.width = Math.round(100 * img.width / size)
-              const h = img.height = Math.round(100 * img.height / size)
-              
-              const canvas = document.createElement('canvas')
-              const c = canvas.getContext('2d')
-              canvas.width = w
-              canvas.height = h
-              c?.drawImage(img, 0, 0, w, h)
-              const imgData = c?.getImageData(0, 0, w, h).data
+            const size = Math.max(img.width, img.height)
+            const w = img.width = Math.round(100 * img.width / size)
+            const h = img.height = Math.round(100 * img.height / size)
 
-              const hash = rgbaToThumbHash(w, h, imgData as ArrayLike<number>)
-              const thumbImg = new Image
-              thumbImg.src = thumbHashToDataURL(hash)
+            const canvas = document.createElement('canvas')
+            const c = canvas.getContext('2d')
+            canvas.width = w
+            canvas.height = h
+            c?.drawImage(img, 0, 0, w, h)
+            const imgData = c?.getImageData(0, 0, w, h).data
 
-              console.log('hash', hash)
-              console.log('thumbImg', thumbImg)
+            const hash = rgbaToThumbHash(w, h, imgData as ArrayLike<number>)
+            const thumbImg = new Image
+            thumbImg.src = thumbHashToDataURL(hash)
 
-              const { data, error } = await supabase
-                .storage
-                .from('article_images')
-                .upload(`${postID}/${Date.now()}`, input.files[0], {
-                  cacheControl: '3600',
-                  upsert: true,
-                })
-              
-              if(error) {
-                console.error(error)
-                alert('Error uploading image')
-                return
-              }
+            console.log('hash', hash)
+            console.log('thumbImg', thumbImg)
 
-              const url = supabase.storage.from('article_images').getPublicUrl(data.path).data.publicUrl;
-              
-              // var reader = new FileReader();
-          
-              // reader.onload = function (e) {
-              //   if(e.target && e.target.result) {
-              //     editor.chain().focus().setImage({ src: e.target.result as string }).run()
-              //   }
-              // };
-          
-              // reader.readAsDataURL(input.files[0]);
+            const { data, error } = await supabase
+              .storage
+              .from('article_images')
+              .upload(`${postID}/${Date.now()}`, input.files[0], {
+                cacheControl: '3600',
+                upsert: true,
+              })
+
+            if (error) {
+              console.error(error)
+              alert('Error uploading image')
+              return
             }
+
+            const url = supabase.storage.from('article_images').getPublicUrl(data.path).data.publicUrl;
+
+            // var reader = new FileReader();
+
+            // reader.onload = function (e) {
+            //   if(e.target && e.target.result) {
+            //     editor.chain().focus().setImage({ src: e.target.result as string }).run()
+            //   }
+            // };
+
+            // reader.readAsDataURL(input.files[0]);
+          }
         }} />
         <button
           onClick={(e) => {
@@ -460,8 +460,8 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
           title='Insert Image'
         >
           <label htmlFor="image-upload" id="image-upload-label" className='contents cursor-pointer h-0 w-0 overflow-visible' onClick={(e) => {
-            if(!postID) {
-              alert('Save your artticle before uploading images')
+            if (!postID) {
+              alert('You must save your article before uploading your first image')
               e.preventDefault()
               e.stopPropagation()
             }
@@ -472,7 +472,7 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
 
         <button
           onClick={() => {
-            if(editor.can().imageToFigure())
+            if (editor.can().imageToFigure())
               editor.chain().focus().imageToFigure().run()
             else
               editor.chain().focus().figureToImage().run()
@@ -481,7 +481,7 @@ export const MenuBar = ( {supabase, postID} : { supabase: SupabaseClient, postID
         >
           <IconTextCaption />
         </button>
-        
+
         <span className="divider"></span>
 
         <button
